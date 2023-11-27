@@ -3,7 +3,9 @@ package main
 import (
 	"bufio"
 	"encoding/json"
+	"flag"
 	"fmt"
+	"io/ioutil"
 	"math/rand"
 	"os"
 	"os/exec"
@@ -23,11 +25,51 @@ var letterHistory []string
 var letterHistoryEnd []string
 var wordHistory []string
 var currentDir, _ = os.Getwd()
+var startWith string
 
 
 func main() {
-	ClearTerminal()
-	rules()
+
+	flag.StringVar(&startWith, "startWith", "", "Start with the save file")
+	flag.Parse()
+
+	if startWith == "save.txt" {
+
+		type Gamestate struct {
+			LiveJose int `json:"LiveJose"`
+			Wordtofind []string `json:"Wordtofind"`
+			WordPartiallyReveal []string `json:"WordPartiallyReveal"`
+			LetterHistory []string `json:"LetterHistory"`
+			WordHistory []string `json:"WordHistory"`
+		}
+
+		file, _ := os.Open("save.txt")
+		defer file.Close()
+
+		var restart Gamestate
+
+		decoder := json.NewDecoder(file)
+
+		err := decoder.Decode(&restart)
+		if err != nil {
+			fmt.Println("Erreur lors du décodage du fichier de sauvegarde")
+		}
+
+		letterHistory = restart.LetterHistory
+		wordHistory = restart.WordHistory
+		liveJose = restart.LiveJose
+
+		ClearTerminal()
+		fmt.Println("")
+		fmt.Println("Bon retour parmis nous, votre sauvegarde à préalablement été sauvegardé et est prête à être utilisé !")
+
+		startGame(restart.Wordtofind,restart.WordPartiallyReveal,liveJose)
+
+
+	}else{
+		ClearTerminal()
+		rules()
+	}
 }
 
 func ClearTerminal() {
@@ -184,14 +226,34 @@ func startGame(arrSelectWord []string, wordPartiallyReveal [] string, liveJose i
 		choiceToLower = strings.ToLower(choice)
 		if choiceToLower == "stop"{
 
-			liveJoseEncoded, _ := json.Marshal(liveJose)
-			fmt.Println(liveJoseEncoded)
+			type Gamestate struct {
+				LiveJose int
+				Wordtofind []string
+				WordPartiallyReveal []string
+				LetterHistory []string
+				WordHistory []string
+			}
 
-			var test int
-			json.Unmarshal(liveJoseEncoded, &test)
+			saveGame := Gamestate{
+				LiveJose: liveJose,
+				Wordtofind: arrSelectWord,
+				WordPartiallyReveal: wordPartiallyReveal,
+				LetterHistory: letterHistory,
+				WordHistory: wordHistory,
+			}
 
-			fmt.Println(test)
-			fmt.Scan(&choice)
+			save, err := json.Marshal(saveGame)
+			if err != nil {
+				fmt.Println("Erreur lors de la sauvegarde de la partie")
+			}
+
+			ioutil.WriteFile("save.txt", save, 0644)
+
+			ClearTerminal()
+
+			fmt.Println("Votre partie a été sauvegardé, à bientôt !")
+
+			os.Exit(0)
 
 		}
 
@@ -218,7 +280,7 @@ func startGame(arrSelectWord []string, wordPartiallyReveal [] string, liveJose i
 			}
 		} else {
 			ClearTerminal()
-			fmt.Println("Merci de saisir " + red + "UNIQUEMENT " + reset + "une lettre ou un mot !")
+			fmt.Println("Merci de saisir " + red + "UNIQUEMENT " + reset + "une lettre ou un mot (de même longeur) !")
 			i--
 		}
 	}
@@ -362,23 +424,31 @@ func checkWordFind(wordPartiallyReveal []string,arrSelectWord []string) {
 	if wordFind == true {
 		ClearTerminal()
 		fmt.Println("\n"+ green + "Vous avez deviné le mot !"+ reset)
-		fmt.Print("Vous avez essayé les lettres suivantes : ")
-		printLetterHistoryEnd()
-		fmt.Print("Vous avez essayé les mots suivants : ")
-		printWordHistory()
+		if len(letterHistory) > 0 {
+			fmt.Print("Les lettres essayés ont été : ")
+			printLetterHistoryInGame()
+		}
+		if len(wordHistory) > 0 {
+			fmt.Print("Les mots essayés ont été : ")
+			printWordHistory()
+		}
 		fmt.Print("Le mot était : ")
 		printWord(arrSelectWord)
 	}else if liveJose <= 0{
 		ClearTerminal()
-		fmt.Print("\n"+ red+"Vous n'avez plus de vie !"+reset + "Le mot était : ")
+		fmt.Print("\n"+ red+"Vous n'avez plus de vie !"+reset + "\nLe mot était : ")
 		printWord(arrSelectWord)
 		fmt.Println("")
 		fmt.Println("")
 		printJose(71,78)
-		fmt.Print("Vous avez essayé les lettres suivantes : ")
-		printLetterHistoryEnd()
-		fmt.Print("Vous avez essayé les mots suivants : ")
-		printWordHistory()
+		if len(letterHistory) > 0 {
+			fmt.Print("Les lettres essayés ont été : ")
+			printLetterHistoryInGame()
+		}
+		if len(wordHistory) > 0 {
+			fmt.Print("Les mots essayés ont été : ")
+			printWordHistory()
+		}
 		fmt.Println(red+"Vous êtes pendu !"+reset)
 	}else{
 		startGame(arrSelectWord,wordPartiallyReveal,liveJose)
