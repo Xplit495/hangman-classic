@@ -5,12 +5,10 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
-	"math/rand"
 	"os"
-	"os/exec"
-	"runtime"
-	"sort"
 	"strings"
+
+	Util "hangman-classic/util"
 )
 
 var yellow = "\033[33m"
@@ -90,164 +88,8 @@ func main() {
 
 	} else {
 		ClearTerminal()
-		rules()
+		Util.Rules()
 	}
-}
-
-func ClearTerminal() {
-	var cmd *exec.Cmd
-	if runtime.GOOS == "windows" {
-		cmd = exec.Command("cmd", "/c", "cls")
-	} else {
-		cmd = exec.Command("clear")
-	}
-	cmd.Stdout = os.Stdout
-	err := cmd.Run()
-	if err != nil {
-		fmt.Println("Erreur lors de l'éxécution de la commande de nettoyage du terminal")
-		return
-	}
-}
-
-func rules() {
-	fmt.Println("")
-	fmt.Println("Bienvenue dans ce super jeu, les régles sont simples :")
-	fmt.Println("- Vous pouvez proposer ou un mot ou une lettre")
-	fmt.Println("- Une mauvaise lettre vous retire" + yellow + " une " + reset + "vie. Mais " + red + "attention" + reset + " car un mauvais mot vous en retire" + yellow + " 2" + reset + " !")
-	fmt.Print("Appuyer sur entrer pour continuer : ")
-	_, err := bufio.NewReader(os.Stdin).ReadBytes('\n')
-	if err != nil {
-		fmt.Println("Erreur lors de la lecture de l'entrée standard")
-		return
-	}
-	chooseDifficulty()
-}
-
-func chooseDifficulty() {
-	var difficulty int
-	for i := 0; i <= 1; i++ {
-		ClearTerminal()
-		fmt.Println("")
-		fmt.Print("Choissisez votre niveau de difficulté (1-3), 1: Facile, 2: Moyen, 3: Difficile. Que choissisez-vous : ")
-		fmt.Scanln(&difficulty)
-		if difficulty != 1 && difficulty != 2 && difficulty != 3 {
-			i--
-		} else {
-			break
-		}
-	}
-	selectDictionnary(difficulty)
-}
-
-func selectDictionnary(difficulty int) {
-	switch difficulty {
-	case 1:
-		absolutePath := currentDir + "\\resources\\dictionnary\\words.txt"
-		selectRandomWordIntoDictionnary(absolutePath)
-	case 2:
-		absolutePath := currentDir + "\\resources\\dictionnary\\words2.txt"
-		selectRandomWordIntoDictionnary(absolutePath)
-	case 3:
-		absolutePath := currentDir + "\\resources\\dictionnary\\words3.txt"
-		selectRandomWordIntoDictionnary(absolutePath)
-	}
-}
-
-func selectRandomWordIntoDictionnary(absolutePath string) {
-	var (
-		arrSelectWord   []string
-		word            string
-		numberOfWords   int
-		indexRandomWord int
-	)
-
-	f, _ := os.Open(absolutePath)
-	scanner := bufio.NewScanner(f)
-	scanner.Split(bufio.ScanWords)
-	for scanner.Scan() {
-		numberOfWords++
-	}
-	err := f.Close()
-	if err != nil {
-		fmt.Println("Erreur lors de la fermeture du fichier de dictionnaire")
-		return
-	}
-	indexRandomWord = rand.Intn(numberOfWords)
-
-	currentLine := 0
-	f2, _ := os.Open(absolutePath)
-	scanner2 := bufio.NewScanner(f2)
-	scanner2.Split(bufio.ScanWords)
-	for scanner2.Scan() {
-		currentLine++
-		if currentLine == indexRandomWord {
-			word = scanner2.Text()
-			break
-		}
-	}
-	err2 := f2.Close()
-	if err2 != nil {
-		fmt.Println("Erreur lors de la fermeture du fichier de dictionnaire")
-		return
-	}
-	arrSelectWord = strings.Split(word, "")
-
-	findWordClue(arrSelectWord)
-}
-
-func findWordClue(arrSelectWord []string) {
-	var (
-		randomClues []int
-		n           = (len(arrSelectWord) / 2) - 1
-	)
-
-	usedClues := make(map[int]bool)
-	for i := 1; i <= n; i++ {
-		var newClue int
-		for {
-			newClue = rand.Intn(len(arrSelectWord) - 1)
-			if !usedClues[newClue] {
-				usedClues[newClue] = true
-				break
-			}
-		}
-		randomClues = append(randomClues, newClue)
-	}
-	sort.Ints(randomClues)
-
-	associateClueToWord(randomClues, arrSelectWord)
-}
-
-func associateClueToWord(randomClues []int, arrSelectWord []string) {
-	var (
-		values              = 0
-		wordPartiallyReveal []string
-	)
-
-	if len(randomClues) == 0 {
-		for i := 0; i <= len(arrSelectWord)-1; i++ {
-			wordPartiallyReveal = append(wordPartiallyReveal, "_")
-		}
-	} else {
-		for i := 0; i <= len(arrSelectWord)-1; i++ {
-			if i == randomClues[values] { // SERT A AFFICHER SEULEMENT LES LETTRES ALEATOIRES CHOISIS PRECEDEMENT
-				wordPartiallyReveal = append(wordPartiallyReveal, arrSelectWord[i])
-				if values+1 >= len(randomClues) {
-					values = 0
-				} else {
-					values += 1
-				}
-			} else {
-				wordPartiallyReveal = append(wordPartiallyReveal, "_")
-			} // SERT A AFFICHER SEULEMENT LES LETTRES ALEATOIRES CHOISIS PRECEDEMENT
-		}
-	}
-
-	fmt.Println("")
-	fmt.Print("\nLe mot avec le(s) indice(s) est : ")
-	printWordPartiallyReveal(wordPartiallyReveal)
-	fmt.Println("")
-	startGame(arrSelectWord, wordPartiallyReveal, 10)
 }
 
 func startGame(arrSelectWord []string, wordPartiallyReveal []string, liveJose int) {
@@ -513,79 +355,6 @@ func checkWordFind(wordPartiallyReveal []string, arrSelectWord []string) {
 }
 
 // Début des fonctions d'affichage
-func printAscii(wordToPrintInAscii []string) {
-	wordPartiallyRevealString := strings.Join(wordToPrintInAscii, "")
-	arrRune := []rune(wordPartiallyRevealString)
-	for i := 0; i < 9; i++ {
-		for j := 0; j < len(wordToPrintInAscii); j++ {
-			startLine := int((arrRune[j] - 32) * 9)
-			endLine := int(((arrRune[j] + 1) - 32) * 9)
-			file, _ := os.Open(pathAscii)
-			scanner := bufio.NewScanner(file)
-			currentLine := 0
-			for scanner.Scan() {
-				currentLine++
-				if currentLine == startLine+i+1 {
-					fmt.Print(scanner.Text())
-					fmt.Print("  ")
-					break
-				}
-				if currentLine >= endLine {
-					err := file.Close()
-					if err != nil {
-						fmt.Println("Erreur lors de la fermeture du fichier ascii")
-						return
-					}
-					break
-				}
-			}
-			_, err := file.Seek(0, 0)
-			if err != nil {
-				fmt.Println("Erreur lors de la remise du pointeur du fichier ascii")
-				return
-			}
-		}
-		fmt.Println()
-	}
-}
-
-func printWordPartiallyReveal(wordPartiallyReveal []string) {
-	if asciiMode != "" {
-		printAscii(wordPartiallyReveal)
-	} else {
-		for i := 0; i < len(wordPartiallyReveal); i++ {
-			fmt.Print(wordPartiallyReveal[i])
-		}
-		fmt.Println("")
-	}
-}
-
-func printWord(arrSelectWord []string) {
-	if asciiMode != "" {
-		printAscii(arrSelectWord)
-	} else {
-		for i := 0; i < len(arrSelectWord); i++ {
-			fmt.Print(arrSelectWord[i])
-		}
-	}
-	fmt.Println("")
-}
-
-func printLetterHistory() {
-	for i := 0; i <= len(letterHistory)-1; i++ {
-		fmt.Print(letterHistory[i])
-		fmt.Print(" ")
-	}
-	fmt.Println("")
-}
-
-func printWordHistory() {
-	for i := 0; i < len(wordHistory); i++ {
-		fmt.Print(wordHistory[i])
-		fmt.Print(" ")
-	}
-	fmt.Println("")
-}
 
 // A séparer dans des dossiers
 
