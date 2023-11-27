@@ -21,7 +21,6 @@ var reset = "\033[0m"
 var liveJose = 10
 var choiceToLowerRune []rune
 var letterHistory []string
-var letterHistoryEnd []string
 var wordHistory []string
 var currentDir, _ = os.Getwd()
 var startWith string
@@ -35,6 +34,11 @@ func main() {
 
 	flag.Parse()
 
+	if asciiMode != "" && asciiMode != "standard.txt" && asciiMode != "shadow.txt" && asciiMode != "thinkertoy.txt" {
+		fmt.Println("Le fichier ascii spécifié n'existe pas, merci de relancer le programme avec un fichier existant")
+		return
+	}
+
 	if asciiMode == "standard.txt" {
 		pathAscii = currentDir + "\\resources\\ascii\\standard.txt"
 	} else if asciiMode == "shadow.txt" {
@@ -43,6 +47,10 @@ func main() {
 		pathAscii = currentDir + "\\resources\\ascii\\thinkertoy.txt"
 	}
 
+	if startWith != "" && startWith != "save.txt" {
+		fmt.Println("Le fichier de sauvegarde spécifié n'existe pas, merci de relancer le programme avec un fichier existant")
+		return
+	}
 	if startWith == "save.txt" {
 
 		type Gamestate struct {
@@ -55,7 +63,7 @@ func main() {
 
 		var restart Gamestate
 
-		file, _ := os.Open("\\resources\\save.txt")
+		file, _ := os.Open(currentDir + "\\resources\\save.txt")
 		defer func(file *os.File) {
 			err := file.Close()
 			if err != nil {
@@ -121,11 +129,7 @@ func chooseDifficulty() {
 		ClearTerminal()
 		fmt.Println("")
 		fmt.Print("Choissisez votre niveau de difficulté (1-3), 1: Facile, 2: Moyen, 3: Difficile. Que choissisez-vous : ")
-		_, err := fmt.Scanln(&difficulty)
-		if err != nil {
-			fmt.Println("Erreur lors de la lecture de l'entrée standard")
-			return
-		}
+		fmt.Scanln(&difficulty)
 		if difficulty != 1 && difficulty != 2 && difficulty != 3 {
 			i--
 		} else {
@@ -257,7 +261,7 @@ func startGame(arrSelectWord []string, wordPartiallyReveal []string, liveJose in
 	fmt.Println("")
 	if len(letterHistory) > 0 {
 		fmt.Print("Les lettres déjà essayé sont : ")
-		printLetterHistoryInGame()
+		printLetterHistory()
 	}
 	if len(wordHistory) > 0 {
 		fmt.Print("Les mots déjà essayé sont : ")
@@ -296,7 +300,7 @@ func startGame(arrSelectWord []string, wordPartiallyReveal []string, liveJose in
 				fmt.Println("Erreur lors de la sauvegarde de la partie")
 			}
 
-			err2 := os.WriteFile("save.txt", save, 0644)
+			err2 := os.WriteFile(currentDir+"\\resources\\save.txt", save, 0644)
 			if err2 != nil {
 				fmt.Println("Erreur lors de la sauvegarde de la partie")
 				return
@@ -340,7 +344,6 @@ func startGame(arrSelectWord []string, wordPartiallyReveal []string, liveJose in
 	if len(choiceToLowerStrings) == 1 {
 		for i := 0; i < len(choiceToLowerStrings); i++ {
 			letterHistory = append(letterHistory, choiceToLowerStrings[i])
-			letterHistoryEnd = append(letterHistoryEnd, choiceToLowerStrings[i])
 		}
 	} else {
 		wordHistory = append(wordHistory, choiceToLower)
@@ -477,31 +480,32 @@ func checkWordFind(wordPartiallyReveal []string, arrSelectWord []string) {
 		ClearTerminal()
 		fmt.Println("\n" + green + "Vous avez deviné le mot !" + reset)
 		if len(letterHistory) > 0 {
+			fmt.Println("")
 			fmt.Print("Les lettres essayés ont été : ")
-			printLetterHistoryInGame()
+			printLetterHistory()
 		}
 		if len(wordHistory) > 0 {
 			fmt.Print("Les mots essayés ont été : ")
 			printWordHistory()
 		}
 		fmt.Print("Le mot était : ")
-		printWordPartiallyReveal(wordPartiallyReveal)
+		printWord(arrSelectWord)
 		fmt.Println("")
 	} else if liveJose <= 0 {
 		ClearTerminal()
 		fmt.Print("\n" + red + "Vous n'avez plus de vie !" + reset + "\nLe mot était : ")
-		printWordPartiallyReveal(wordPartiallyReveal)
-		fmt.Println("")
-		fmt.Println("")
+		printWord(arrSelectWord)
 		printJose(71, 78)
 		if len(letterHistory) > 0 {
+			fmt.Println("")
 			fmt.Print("Les lettres essayés ont été : ")
-			printLetterHistoryInGame()
+			printLetterHistory()
 		}
 		if len(wordHistory) > 0 {
 			fmt.Print("Les mots essayés ont été : ")
 			printWordHistory()
 		}
+		fmt.Println("")
 		fmt.Println(red + "Vous êtes pendu !" + reset)
 	} else {
 		startGame(arrSelectWord, wordPartiallyReveal, liveJose)
@@ -509,41 +513,45 @@ func checkWordFind(wordPartiallyReveal []string, arrSelectWord []string) {
 }
 
 // Début des fonctions d'affichage
-func printWordPartiallyReveal(wordPartiallyReveal []string) {
-	wordPartiallyRevealString := strings.Join(wordPartiallyReveal, "")
+func printAscii(wordToPrintInAscii []string) {
+	wordPartiallyRevealString := strings.Join(wordToPrintInAscii, "")
 	arrRune := []rune(wordPartiallyRevealString)
-	if asciiMode != "" {
-		for i := 0; i < 9; i++ {
-			for j := 0; j < len(wordPartiallyReveal); j++ {
-				startLine := int((arrRune[j] - 32) * 9)
-				endLine := int(((arrRune[j] + 1) - 32) * 9)
-				file, _ := os.Open(pathAscii)
-				scanner := bufio.NewScanner(file)
-				currentLine := 0
-				for scanner.Scan() {
-					currentLine++
-					if currentLine == startLine+i+1 {
-						fmt.Print(scanner.Text())
-						fmt.Print("  ")
-						break
-					}
-					if currentLine >= endLine {
-						err := file.Close()
-						if err != nil {
-							fmt.Println("Erreur lors de la fermeture du fichier ascii")
-							return
-						}
-						break
-					}
+	for i := 0; i < 9; i++ {
+		for j := 0; j < len(wordToPrintInAscii); j++ {
+			startLine := int((arrRune[j] - 32) * 9)
+			endLine := int(((arrRune[j] + 1) - 32) * 9)
+			file, _ := os.Open(pathAscii)
+			scanner := bufio.NewScanner(file)
+			currentLine := 0
+			for scanner.Scan() {
+				currentLine++
+				if currentLine == startLine+i+1 {
+					fmt.Print(scanner.Text())
+					fmt.Print("  ")
+					break
 				}
-				_, err := file.Seek(0, 0)
-				if err != nil {
-					fmt.Println("Erreur lors de la remise du pointeur du fichier ascii")
-					return
+				if currentLine >= endLine {
+					err := file.Close()
+					if err != nil {
+						fmt.Println("Erreur lors de la fermeture du fichier ascii")
+						return
+					}
+					break
 				}
 			}
-			fmt.Println()
+			_, err := file.Seek(0, 0)
+			if err != nil {
+				fmt.Println("Erreur lors de la remise du pointeur du fichier ascii")
+				return
+			}
 		}
+		fmt.Println()
+	}
+}
+
+func printWordPartiallyReveal(wordPartiallyReveal []string) {
+	if asciiMode != "" {
+		printAscii(wordPartiallyReveal)
 	} else {
 		for i := 0; i < len(wordPartiallyReveal); i++ {
 			fmt.Print(wordPartiallyReveal[i])
@@ -552,7 +560,18 @@ func printWordPartiallyReveal(wordPartiallyReveal []string) {
 	}
 }
 
-func printLetterHistoryInGame() {
+func printWord(arrSelectWord []string) {
+	if asciiMode != "" {
+		printAscii(arrSelectWord)
+	} else {
+		for i := 0; i < len(arrSelectWord); i++ {
+			fmt.Print(arrSelectWord[i])
+		}
+	}
+	fmt.Println("")
+}
+
+func printLetterHistory() {
 	for i := 0; i <= len(letterHistory)-1; i++ {
 		fmt.Print(letterHistory[i])
 		fmt.Print(" ")

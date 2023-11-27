@@ -1,1 +1,1 @@
-{"LiveJose":10,"Wordtofind":["m","u","l","a","r","d"],"WordPartiallyReveal":["m","u","_","_","r","_"],"LetterHistory":["m"],"WordHistory":null}
+{"LiveJose":5,"Wordtofind":["h","o","m","m","e"],"WordPartiallyReveal":["_","o","_","_","e"],"LetterHistory":["a","e","o","i","u","c","p"],"WordHistory":null}
