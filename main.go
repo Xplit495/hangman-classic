@@ -11,9 +11,16 @@ import (
 	"strings"
 )
 
+var yellow = "\033[33m"
+var red = "\033[31m"
+var green  = "\033[32m"
+var reset  = "\033[0m"
 var liveJose = 10
 var letterHistory []string
 var letterHistoryEnd []string
+var currentDir, _ = os.Getwd()
+var choiceToLowerRune []rune
+var choiceToLowerStrings  []string
 
 func main() {
 	chooseDifficulty()
@@ -21,67 +28,58 @@ func main() {
 
 func ClearTerminal() {
 	var cmd *exec.Cmd
-
 	if runtime.GOOS == "windows" {
 		cmd = exec.Command("cmd", "/c", "cls")
 	} else {
 		cmd = exec.Command("clear")
 	}
-
 	cmd.Stdout = os.Stdout
 	cmd.Run()
 }
 
 func chooseDifficulty(){
-var difficulty int // CHOISIR NIVEAU DIFFICULTE (POUR LE MOMENT UTILISER SEULEMENT DIIFUCLTE 1 ON CODERA LES AUTRES PLUS TARD)
+var difficulty int
 	for i := 0; i <= 1; i++ {
 		ClearTerminal()
 		fmt.Println("")
-		fmt.Print("Choose your level of difficulty (1-3), 1: Easy, 2: Medium, 3: Hard. What you choose : ") // CHOISIR NIVEAU DIFFICULTE (POUR LE MOMENT UTILISER SEULEMENT DIIFUCLTE 1 ON CODERA LES AUTRES PLUS TARD)
+		fmt.Print("Choissisez votre niveau de difficulté (1-3), 1: Facile, 2: Moyen, 3: Difficile. Que choissisez-vous : ")
 		fmt.Scanln(&difficulty)
 		if difficulty != 1 && difficulty != 2 && difficulty != 3 {
 			i--
 		} else {
 			break
-		} // CHOISIR NIVEAU DIFFICULTE (POUR LE MOMENT UTILISER SEULEMENT DIIFUCLTE 1 ON CODERA LES AUTRES PLUS TARD)
+		}
 	}
 	selectDictionnary(difficulty)
+}
+
+func selectDictionnaryPath(absolutePath string){
+	f, _ := os.Open(absolutePath)
+	defer f.Close()
+	scanner := bufio.NewScanner(f)
+	scanner.Split(bufio.ScanWords)
+	var wordList []string
+	for scanner.Scan() {
+		wordList = append(wordList, scanner.Text())
+	}
+	randomWord(wordList)
 }
 
 func selectDictionnary(difficulty int){
 	switch difficulty {
 	case 1:
-		f, _ := os.Open("C:\\Ytrack\\tls-challenge-go-23-24\\hangman-classic\\words.txt")
-		defer f.Close()
-		scanner := bufio.NewScanner(f)
-		scanner.Split(bufio.ScanWords)
-		wordList := []string{}
-		for scanner.Scan() {
-			wordList = append(wordList, scanner.Text())
-		}
-		randomWord(wordList)
+		relativePath := "words.txt"
+		absolutePath := currentDir + "\\" + relativePath
+		selectDictionnaryPath(absolutePath)
 	case 2:
-		f, _ := os.Open("C:\\Ytrack\\tls-challenge-go-23-24\\hangman-classic\\words2.txt")
-		defer f.Close()
-		scanner := bufio.NewScanner(f)
-		scanner.Split(bufio.ScanWords)
-		wordList := []string{}
-		for scanner.Scan() {
-			wordList = append(wordList, scanner.Text())
-		}
-		randomWord(wordList)
+		relativePath := "words2.txt"
+		absolutePath := currentDir + "\\" + relativePath
+		selectDictionnaryPath(absolutePath)
 	case 3:
-		f, _ := os.Open("C:\\Ytrack\\tls-challenge-go-23-24\\hangman-classic\\words3.txt")
-		defer f.Close()
-		scanner := bufio.NewScanner(f)
-		scanner.Split(bufio.ScanWords)
-		wordList := []string{}
-		for scanner.Scan() {
-			wordList = append(wordList, scanner.Text())
-		}
-		randomWord(wordList)
+		relativePath := "words3.txt"
+		absolutePath := currentDir + "\\" + relativePath
+		selectDictionnaryPath(absolutePath)
 	}
-
 }
 
 func randomWord(wordList []string){
@@ -142,182 +140,67 @@ func associateClueToWord(randomClues []int, arrSelectWord []string){
 	}
 
 	fmt.Println("")
-	ClearTerminal()
+
 	fmt.Print("\nLe mot avec le(s) indice(s) est : ")
-	showWordPartiallyReveal(wordPartiallyReveal)
+	printWordPartiallyReveal(wordPartiallyReveal)
 	fmt.Println("")
 	startGame(arrSelectWord,wordPartiallyReveal,10)
 }
 
-func printLive(liveJose int){
-	file, _ := os.Open("C:\\Ytrack\\tls-challenge-go-23-24\\hangman-classic\\hangman.txt")
-	defer file.Close()
-	scanner := bufio.NewScanner(file)
-	currentline := 0
-	switch liveJose {
-		case 10:
-		fmt.Print("")
-		case 9:
-			startline := 1
-			endline := 7
-			for scanner.Scan() {
-				currentline++
-				if currentline >= startline && currentline <= endline {
-					fmt.Println(scanner.Text())
-				}
-				if currentline > endline {
-					file.Close()
+func startGame(arrSelectWord []string, wordPartiallyReveal [] string, liveJose int) {
+	printLive(liveJose)
+	fmt.Println("")
+	fmt.Printf("Il vous reste "+yellow+"%d vie "+reset+"avant d'être pendu !\n", liveJose)
+	fmt.Print("Les lettres déjà essayé sont : ")
+	printLetterHistoryInGame()
+	var choice string
+	var choiceToLower string
+	for i := 0; i <= 1; i++ {
+		fmt.Print("Entrez votre lettre : ")
+		fmt.Scan(&choice)
+		choiceToLower = strings.ToLower(choice)
+		choiceToLowerRune = []rune(choiceToLower)
+		for j := 0; j < len(choiceToLowerRune); j++ {
+			choiceToLowerStrings = append(choiceToLowerStrings, string(choiceToLowerRune[j]))
+		}
+		exit := true
+		for k := 0; k < len(choiceToLowerRune); k++ {
+			if choiceToLowerRune[k] >= rune(97) && choiceToLowerRune[k] <= rune(122) {
+				if k+1 == len(choiceToLowerRune) {
 					break
 				}
-			}
-		case 8:
-			startline := 8
-			endline := 14
-			for scanner.Scan() {
-				currentline++
-				if currentline >= startline && currentline <= endline {
-					fmt.Println(scanner.Text())
-				}
-				if currentline > endline {
-					break
-				}
-			}
-		case 7:
-			startline := 15
-			endline := 22
-			for scanner.Scan() {
-				currentline++
-				if currentline >= startline && currentline <= endline {
-					fmt.Println(scanner.Text())
-				}
-				if currentline > endline {
-					break
-				}
-			}
-		case 6:
-			startline := 23
-			endline := 30
-			for scanner.Scan() {
-				currentline++
-				if currentline >= startline && currentline <= endline {
-					fmt.Println(scanner.Text())
-				}
-				if currentline > endline {
-					break
-				}
-			}
-		case 5:
-			startline := 31
-			endline := 38
-			for scanner.Scan() {
-				currentline++
-				if currentline >= startline && currentline <= endline {
-					fmt.Println(scanner.Text())
-				}
-				if currentline > endline {
-					break
-				}
-			}
-		case 4:
-			startline := 39
-			endline := 46
-			for scanner.Scan() {
-				currentline++
-				if currentline >= startline && currentline <= endline {
-					fmt.Println(scanner.Text())
-				}
-				if currentline > endline {
-					break
-				}
-			}
-		case 3:
-			startline := 47
-			endline := 54
-			for scanner.Scan() {
-				currentline++
-				if currentline >= startline && currentline <= endline {
-					fmt.Println(scanner.Text())
-				}
-				if currentline > endline {
-					break
-				}
-			}
-		case 2:
-			startline := 55
-			endline := 62
-			for scanner.Scan() {
-				currentline++
-				if currentline >= startline && currentline <= endline {
-					fmt.Println(scanner.Text())
-				}
-				if currentline > endline {
-					break
-				}
-			}
-		case 1:
-			startline := 63
-			endline := 70
-			for scanner.Scan() {
-				currentline++
-				if currentline >= startline && currentline <= endline {
-					fmt.Println(scanner.Text())
-				}
-				if currentline > endline {
-					break
-				}
-			}
-		case 0:
-			startline := 71
-			endline := 78
-			for scanner.Scan() {
-				currentline++
-				if currentline >= startline && currentline <= endline {
-					fmt.Println(scanner.Text())
-				}
-				if currentline > endline {
-					break
-				}
-			}
-	}
-}
-
-
-func startGame(arrSelectWord []string, wordPartiallyReveal [] string, liveJose int){
-		printLive(liveJose)
-		fmt.Println("")
-		fmt.Printf("Il vous reste %d vie avant d'être pendu !\n", liveJose)
-		var choice string
-		var choiceToLower string
-		for i := 0; i <= 1; i++ {
-			fmt.Print("Entrez votre lettre : ")
-			fmt.Scan(&choice)
-			choiceToLower = strings.ToLower(choice)
-			choiceToLowerRune := []rune(choiceToLower)
-			if len(choiceToLowerRune) > 1 || (choiceToLowerRune[0] >= rune(0) && choiceToLowerRune[0] <= rune(96) || (choiceToLowerRune[0] > rune(122)))  {
+			}else{
 				ClearTerminal()
-				fmt.Println("Merci de saisir UN seul caractère de l'alphabet !")
+				fmt.Println("Merci de saisir" + red + " UNIQUEMENT " + reset + "des caractère de l'alphabet !")
+				exit = false
 				i--
-			} else {
+				}
+			}
+			if exit == true {
 				break
 			}
 		}
 		letterHistory = append(letterHistory, choiceToLower)
 		letterHistoryEnd = append(letterHistoryEnd, choiceToLower)
-		refreshWord(arrSelectWord,choiceToLower,wordPartiallyReveal,letterHistory,letterHistoryEnd)
+		refreshWord(arrSelectWord,choiceToLower,wordPartiallyReveal,choiceToLowerStrings)
 }
 
-func refreshWord(arrSelectWord []string, choiceToLower string, wordPartiallyReveal []string, letterHistory []string, letterHistoryEnd []string) {
-	letterFind := false
+func refreshWord(arrSelectWord []string, choiceToLower string, wordPartiallyReveal []string,choiceToLowerStrings []string) {
+	//letterFind := false
 	for index, letter := range arrSelectWord {
-		if letter == choiceToLower {
-			wordPartiallyReveal[index] = letter
-			letterFind = true
+		for i := 0; i < len(choiceToLowerStrings); i++ {
+			if letter == choiceToLowerStrings[i] {
+				wordPartiallyReveal[index] = letter
+				//letterFind = true
+			}
 		}
+
 	}
-	histroy(letterHistory, choiceToLower, letterFind ,wordPartiallyReveal,letterHistoryEnd,arrSelectWord)
+	printWordPartiallyReveal(wordPartiallyReveal)
+	//histroy(choiceToLower, letterFind ,wordPartiallyReveal,arrSelectWord)
 }
 
-func histroy (letterHistory []string, choiceToLower string, letterFind bool, wordPartiallyReveal []string, letterHistoryEnd []string, arrSelectWord []string){
+func histroy (choiceToLower string, letterFind bool, wordPartiallyReveal []string, arrSelectWord []string){
 	counter := 0
 	letterAlreadyUse := false
 	for _, char := range letterHistory {
@@ -332,53 +215,81 @@ func histroy (letterHistory []string, choiceToLower string, letterFind bool, wor
 			}
 		}
 	}
-	checkLetterUse(letterFind, letterAlreadyUse, wordPartiallyReveal, letterHistory, letterHistoryEnd, arrSelectWord)
+	checkLetterUses(letterFind, letterAlreadyUse, wordPartiallyReveal,arrSelectWord)
 }
 
-func checkLetterUse(letterFind bool, alreadyUse bool, wordPartiallyReveal []string,letterHistory []string,letterHistoryEnd []string, arrSelectWord []string) {
-	if letterFind == true && alreadyUse == true {
+func checkLetterUses(letterFind bool, alreadyUse bool, wordPartiallyReveal []string, arrSelectWord []string) {
+	if alreadyUse == true {
 			ClearTerminal()
-			fmt.Println("VOUS AVEZ DEJA ESSAYEZ CETTE LETTRE ! FAITES ATTENTION.")
+			fmt.Println(red+"Vous avez déjà essayé cette lettre !"+reset) //Pas fonctionnel mais à laisser pour les advandec features !!!
+			startGame(arrSelectWord,wordPartiallyReveal,liveJose)
 	}
+	fmt.Println("")
+	findLetter(wordPartiallyReveal,arrSelectWord,letterFind)
+}
+
+func findLetter(wordPartiallyReveal []string,arrSelectWord []string, letterFind bool){
 	if letterFind == true{
-		findLetterYes(wordPartiallyReveal, letterHistory, letterHistoryEnd, arrSelectWord)
+		ClearTerminal()
+		fmt.Println(green+"Bonne lettre !"+reset)
+		fmt.Println("")
+		fmt.Printf("Pour le moment le mot ressemble à ca -> ")
+		printWordPartiallyReveal(wordPartiallyReveal)
+		checkWordFind(wordPartiallyReveal,arrSelectWord)
 	}else{
-		findLetterNo(wordPartiallyReveal, letterHistory, letterHistoryEnd, arrSelectWord)
+		liveJose--
+		ClearTerminal()
+		fmt.Println(red+"Mauvaise lettre !"+reset)
+		fmt.Println("")
+		fmt.Printf("Pour le moment le mot ressemble à ca -> ")
+		printWordPartiallyReveal(wordPartiallyReveal)
+		checkWordFind(wordPartiallyReveal,arrSelectWord)
 	}
 }
 
-func findLetterYes(wordPartiallyReveal []string, letterHistory []string, letterHistoryEnd []string,arrSelectWord []string){
-	fmt.Println("")
-	ClearTerminal()
-	fmt.Println("Bonne lettre !")
-	fmt.Println("")
-	fmt.Printf("Pour le moment le mot ressemble à ca -> ")
-	showWordPartiallyReveal(wordPartiallyReveal)
-	fmt.Print("Les lettres déjà essayé sont : ")
-	showLetterHistoryInGame(letterHistory)
-	checkWordFind(wordPartiallyReveal, letterHistoryEnd,arrSelectWord)
+func checkWordFind(wordPartiallyReveal []string,arrSelectWord []string) {
+	wordFind := true
+	for _, letter := range wordPartiallyReveal {
+		if letter == "_" {
+			wordFind = false
+			break
+		}
+	}
+	if wordFind == true {
+		ClearTerminal()
+		fmt.Println("\nVous avez deviné le mot !")
+		fmt.Print("Vos propositions ont étaient : ")
+		printLetterHistoryEnd()
+		fmt.Print("Le mot était : ")
+		printWord(arrSelectWord)
+	}else if liveJose == 0{
+		ClearTerminal()
+		fmt.Print("\nVous n'avez plus de vie. Le mot était : ")
+		printWord(arrSelectWord)
+		fmt.Println("")
+		fmt.Println("")
+		printJose(71,78)
+		fmt.Print("Vos propositions ont étaient : ")
+		printLetterHistoryEnd()
+		fmt.Println("Vous êtes pendu !")
+	}else{
+		startGame(arrSelectWord,wordPartiallyReveal,liveJose)
+	}
 }
 
-func findLetterNo(wordPartiallyReveal []string, letterHistory []string, letterHistoryEnd []string,arrSelectWord []string){
-	liveJose--
-	ClearTerminal()
-	fmt.Println("Mauvaise lettre.")
-	fmt.Println("")
-	fmt.Printf("Pour le moment le mot ressemble à ca -> ")
-	showWordPartiallyReveal(wordPartiallyReveal)
-	fmt.Print("Les lettres déjà essayé sont : ")
-	showLetterHistoryInGame(letterHistory)
-	checkWordFind(wordPartiallyReveal, letterHistoryEnd,arrSelectWord)
-}
 
-func showWordPartiallyReveal(wordPartiallyReveal []string){
+
+
+
+//Début des fonctions d'affichage
+func printWordPartiallyReveal(wordPartiallyReveal []string){
 	for i := 0; i < len(wordPartiallyReveal); i++ {
 		fmt.Print(wordPartiallyReveal[i])
 	}
 	fmt.Println("")
 }
 
-func showLetterHistoryInGame(letterHistory []string){
+func printLetterHistoryInGame(){
 	for i := 0; i <= len(letterHistory)-1; i++ {
 		fmt.Print(letterHistory[i])
 		fmt.Print(" ")
@@ -386,8 +297,8 @@ func showLetterHistoryInGame(letterHistory []string){
 	fmt.Println("")
 	fmt.Println("")
 }
-
-func showLetterHistoryEnd(letterHistoryEnd []string)  {
+																		//A séparer dans des dossiers
+func printLetterHistoryEnd()  {
 	for i := 0; i <= len(letterHistoryEnd)-1; i++ {
 		fmt.Print(letterHistoryEnd[i])
 		fmt.Print(" ")
@@ -401,37 +312,57 @@ func printWord(arrSelectWord []string){
 		fmt.Print(arrSelectWord[i])
 	}
 }
+//Fin des fonctions d'affichage
 
 
-func checkWordFind(wordPartiallyReveal []string, letterHistoryEnd []string,arrSelectWord []string) {
-	wordFind := true
-	for _, letter := range wordPartiallyReveal {
-		if letter == "_" {
-			wordFind = false
+
+
+
+
+
+
+//Debut fonction position Jose
+func printJose(startLine int ,endLine int){
+	relativePath := "hangman.txt"
+	absolutePath := currentDir + "\\" + relativePath
+	file, _ := os.Open(absolutePath)
+	defer file.Close()
+	scanner := bufio.NewScanner(file)
+	currentLine := 0
+	for scanner.Scan() {
+		currentLine++
+		if currentLine >= startLine && currentLine <= endLine {
+			fmt.Println(scanner.Text())
+		}
+		if currentLine > endLine {
+			file.Close()
 			break
 		}
 	}
-	if wordFind == true {
-		ClearTerminal()
-		fmt.Printf("\nVous avez deviné le mot !")
-		fmt.Println("")
-		fmt.Print("Vos propositions ont étaient : ")
-		showLetterHistoryEnd(letterHistoryEnd)
-	}else if liveJose == 0{
-		ClearTerminal()
-		fmt.Print("\nVous n'avez plus de vie. Le mot était : ")
-		printWord(arrSelectWord)
-		fmt.Println("")
-		fmt.Println("")
-		printLive(0)
-		fmt.Print("Vos propositions ont étaient : ")
-		showLetterHistoryEnd(letterHistoryEnd)
-		fmt.Println("Vous êtes pendu !")
-	}else{
-		startGame(arrSelectWord,wordPartiallyReveal,liveJose)
+}
+																	//A séparer dans des dossiers
+func printLive(liveJose int) {
+	switch liveJose {
+	case 10:
+		fmt.Print("")
+	case 9:
+		printJose(1, 7)
+	case 8:
+		printJose(8, 14)
+	case 7:
+		printJose(15, 22)
+	case 6:
+		printJose(23, 30)
+	case 5:
+		printJose(31, 38)
+	case 4:
+		printJose(39, 46)
+	case 3:
+		printJose(47, 54)
+	case 2:
+		printJose(55, 62)
+	case 1:
+		printJose(63, 70)
 	}
 }
-
-/*
-live := []string{"  +---+  \n  |   |  \n  O   |  \n /|\\  |  \n / \\  |  \n      |  \n=========\n", "  +---+  \n  |   |  \n  O   |  \n /|\\  |  \n /    |  \n      |  \n=========\n", "  +---+  \n  |   |  \n  O   |  \n /|\\  |  \n      |  \n      |  \n=========\n","=========\n","  +---+  \n  |   |  \n  O   |  \n /|   |  \n      |  \n      |  \n=========\n" ,"  +---+  \n  |   |  \n  O   |  \n  |   |  \n      |  \n      |  \n=========\n" , "  +---+  \n  |   |  \n  O   |  \n      |  \n      |  \n      |  \n=========\n","  +---+  \n  |   |  \n      |  \n      |  \n      |  \n      |  \n=========\n" ,"  +---+  \n      |  \n      |  \n      |  \n      |  \n      |  \n=========\n" , "    |  \n    |  \n    |  \n    |  \n    |  \n=========\n" ,""}
-*/
+//Fin fonction position Jose
