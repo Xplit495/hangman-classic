@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
-	"io/ioutil"
 	"math/rand"
 	"os"
 	"os/exec"
@@ -26,12 +25,26 @@ var letterHistoryEnd []string
 var wordHistory []string
 var currentDir, _ = os.Getwd()
 var startWith string
-
+var asciiMode string
+var pathAscii string
 
 func main() {
 
+	flag.StringVar(&asciiMode, "letterFile", "", "Select Ascii Mode")
 	flag.StringVar(&startWith, "startWith", "", "Start with the save file")
+
 	flag.Parse()
+
+	asciiMode = "standard.txt"
+
+
+	if asciiMode == "standard.txt" {
+		pathAscii = currentDir + "\\standard.txt"
+	}else if asciiMode == "shadow.txt" {
+		pathAscii = currentDir + "\\shadow.txt"
+	}else if asciiMode == "thinkertoy.txt" {
+		pathAscii = currentDir + "\\thinkertoy.txt"
+	}
 
 	if startWith == "save.txt" {
 
@@ -65,11 +78,10 @@ func main() {
 
 		startGame(restart.Wordtofind,restart.WordPartiallyReveal,liveJose)
 
-
-	}else{
-		ClearTerminal()
-		rules()
 	}
+
+	ClearTerminal()
+	rules()
 }
 
 func ClearTerminal() {
@@ -112,16 +124,13 @@ var difficulty int
 func selectDictionnary(difficulty int){
 	switch difficulty {
 	case 1:
-		relativePath := "words.txt"
-		absolutePath := currentDir + "\\" + relativePath
+		absolutePath := currentDir + "\\words.txt"
 		selectDictionnaryPath(absolutePath)
 	case 2:
-		relativePath := "words2.txt"
-		absolutePath := currentDir + "\\" + relativePath
+		absolutePath := currentDir + "\\words2.txt"
 		selectDictionnaryPath(absolutePath)
 	case 3:
-		relativePath := "words3.txt"
-		absolutePath := currentDir + "\\" + relativePath
+		absolutePath := currentDir + "\\words3.txt"
 		selectDictionnaryPath(absolutePath)
 	}
 }
@@ -199,12 +208,16 @@ func associateClueToWord(randomClues []int, arrSelectWord []string){
 	fmt.Print("\nLe mot avec le(s) indice(s) est : ")
 	printWordPartiallyReveal(wordPartiallyReveal)
 	fmt.Println("")
+	fmt.Println(arrSelectWord)
 	startGame(arrSelectWord,wordPartiallyReveal,10)
 }
 
 
 func startGame(arrSelectWord []string, wordPartiallyReveal [] string, liveJose int) {
 	var choiceToLowerStrings  []string
+	var choiceToLower string
+	var choice string
+
 	printLive(liveJose)
 	fmt.Println("")
 	fmt.Printf("Il vous reste "+yellow+"%d vie "+reset+"avant d'être pendu !\n", liveJose)
@@ -217,10 +230,9 @@ func startGame(arrSelectWord []string, wordPartiallyReveal [] string, liveJose i
 		fmt.Print("Les mots déjà essayé sont : ")
 		printWordHistory()
 	}
-	var choiceToLower string
-	var choice string
 
 	for i := 0; i <= 1; i++ {
+		choiceToLowerStrings = nil
 		fmt.Print("Entrez votre lettre ou votre mot : ")
 		fmt.Scan(&choice)
 		choiceToLower = strings.ToLower(choice)
@@ -247,7 +259,7 @@ func startGame(arrSelectWord []string, wordPartiallyReveal [] string, liveJose i
 				fmt.Println("Erreur lors de la sauvegarde de la partie")
 			}
 
-			ioutil.WriteFile("save.txt", save, 0644)
+			os.WriteFile("save.txt", save, 0644)
 
 			ClearTerminal()
 
@@ -434,6 +446,7 @@ func checkWordFind(wordPartiallyReveal []string,arrSelectWord []string) {
 		}
 		fmt.Print("Le mot était : ")
 		printWord(arrSelectWord)
+		fmt.Println("")
 	}else if liveJose <= 0{
 		ClearTerminal()
 		fmt.Print("\n"+ red+"Vous n'avez plus de vie !"+reset + "\nLe mot était : ")
@@ -456,15 +469,42 @@ func checkWordFind(wordPartiallyReveal []string,arrSelectWord []string) {
 }
 
 
-
-
-
 //Début des fonctions d'affichage
 func printWordPartiallyReveal(wordPartiallyReveal []string) {
-	for i := 0; i < len(wordPartiallyReveal); i++ {
-		fmt.Print(wordPartiallyReveal[i])
+	wordPartiallyRevealString := strings.Join(wordPartiallyReveal, "")
+	arrRune := []rune(wordPartiallyRevealString)
+
+	if asciiMode != "" {
+		for i := 0; i < len(wordPartiallyReveal); i++ {
+			startLine := int((arrRune[i] - 32) * 9)
+			endLine := int(((arrRune[i] + 1) - 32) * 9)
+
+			file, _ := os.Open(pathAscii)
+			defer file.Close()
+
+			scanner := bufio.NewScanner(file)
+			currentLine := 0
+
+
+			for scanner.Scan() {
+				currentLine++
+				if currentLine >= startLine && currentLine <= endLine {
+					fmt.Println(scanner.Text())
+				}
+				if currentLine >= endLine {
+					file.Close()
+					break
+				}
+			}
+			file.Seek(0, 0)
+		}
+
+	}else{
+		for i := 0; i < len(wordPartiallyReveal); i++ {
+			fmt.Print(wordPartiallyReveal[i])
+		}
+		fmt.Println("")
 	}
-	fmt.Println("")
 }
 
 func printLetterHistoryInGame(){
@@ -501,12 +541,9 @@ func printWord(arrSelectWord []string){
 
 
 
-
-
 //Debut fonction position Jose
 func printJose(startLine int ,endLine int){
-	relativePath := "hangman.txt"
-	absolutePath := currentDir + "\\" + relativePath
+	absolutePath := currentDir + "\\hangman.txt"
 	file, _ := os.Open(absolutePath)
 	defer file.Close()
 	scanner := bufio.NewScanner(file)
