@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"encoding/json"
 	"fmt"
 	"math/rand"
 	"os"
@@ -105,7 +106,7 @@ func randomWord(wordList []string){
 	for i := 0; i < len(selectWord); i++ {
 		arrSelectWord = append(arrSelectWord, string(selectWord[i]))
 	} // SELECTIONNE UN MOT AU HASARD DANS LE DICTIONNAIRE ET LE MET DANS UN TABLEAU
-	fmt.Println(arrSelectWord)
+
 	findWordClue(arrSelectWord)
 }
 
@@ -126,7 +127,7 @@ func findWordClue(arrSelectWord []string){
 		randomClues = append(randomClues, newClue)
 	}
 	sort.Ints(randomClues)
-	fmt.Print(randomClues)
+
 	associateClueToWord(randomClues, arrSelectWord)
 }
 
@@ -166,19 +167,36 @@ func startGame(arrSelectWord []string, wordPartiallyReveal [] string, liveJose i
 	fmt.Println("")
 	fmt.Printf("Il vous reste "+yellow+"%d vie "+reset+"avant d'être pendu !\n", liveJose)
 	fmt.Println("")
-	fmt.Print("Les lettres déjà essayé sont : ")
-	printLetterHistoryInGame()
-	fmt.Print("Les mots déjà essayé sont : ")
-	printWordHistory()
-
+	if len(letterHistory) > 0 {
+		fmt.Print("Les lettres déjà essayé sont : ")
+		printLetterHistoryInGame()
+	}
+	if len(wordHistory) > 0 {
+		fmt.Print("Les mots déjà essayé sont : ")
+		printWordHistory()
+	}
 	var choiceToLower string
 	var choice string
+
 	for i := 0; i <= 1; i++ {
 		fmt.Print("Entrez votre lettre ou votre mot : ")
 		fmt.Scan(&choice)
 		choiceToLower = strings.ToLower(choice)
+		if choiceToLower == "stop"{
+
+			liveJoseEncoded, _ := json.Marshal(liveJose)
+			fmt.Println(liveJoseEncoded)
+
+			var test int
+			json.Unmarshal(liveJoseEncoded, &test)
+
+			fmt.Println(test)
+			fmt.Scan(&choice)
+
+		}
+
 		choiceToLowerRune = []rune(choiceToLower)
-		if len(wordPartiallyReveal) == len(choiceToLowerRune) || len(choiceToLowerRune) == 1{
+		if len(wordPartiallyReveal) == len(choiceToLowerRune) || len(choiceToLowerRune) == 1 {
 			for j := 0; j < len(choiceToLowerRune); j++ {
 				choiceToLowerStrings = append(choiceToLowerStrings, string(choiceToLowerRune[j]))
 			}
@@ -188,7 +206,7 @@ func startGame(arrSelectWord []string, wordPartiallyReveal [] string, liveJose i
 					if k+1 == len(choiceToLowerRune) {
 						break
 					}
-				}else{
+				} else {
 					ClearTerminal()
 					fmt.Println("Merci de saisir" + red + " UNIQUEMENT " + reset + "des caractère de l'alphabet !")
 					exit = false
@@ -198,7 +216,7 @@ func startGame(arrSelectWord []string, wordPartiallyReveal [] string, liveJose i
 			if exit == true {
 				break
 			}
-		}else{
+		} else {
 			ClearTerminal()
 			fmt.Println("Merci de saisir " + red + "UNIQUEMENT " + reset + "une lettre ou un mot !")
 			i--
@@ -372,7 +390,7 @@ func checkWordFind(wordPartiallyReveal []string,arrSelectWord []string) {
 
 
 //Début des fonctions d'affichage
-func printWordPartiallyReveal(wordPartiallyReveal []string){
+func printWordPartiallyReveal(wordPartiallyReveal []string) {
 	for i := 0; i < len(wordPartiallyReveal); i++ {
 		fmt.Print(wordPartiallyReveal[i])
 	}
