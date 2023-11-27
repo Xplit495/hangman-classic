@@ -15,8 +15,8 @@ import (
 
 var yellow = "\033[33m"
 var red = "\033[31m"
-var green  = "\033[32m"
-var reset  = "\033[0m"
+var green = "\033[32m"
+var reset = "\033[0m"
 
 var liveJose = 10
 var choiceToLowerRune []rune
@@ -36,27 +36,32 @@ func main() {
 	flag.Parse()
 
 	if asciiMode == "standard.txt" {
-		pathAscii = currentDir + "\\standard.txt"
-	}else if asciiMode == "shadow.txt" {
-		pathAscii = currentDir + "\\shadow.txt"
-	}else if asciiMode == "thinkertoy.txt" {
-		pathAscii = currentDir + "\\thinkertoy.txt"
+		pathAscii = currentDir + "\\resources\\ascii\\standard.txt"
+	} else if asciiMode == "shadow.txt" {
+		pathAscii = currentDir + "\\resources\\ascii\\shadow.txt"
+	} else if asciiMode == "thinkertoy.txt" {
+		pathAscii = currentDir + "\\resources\\ascii\\thinkertoy.txt"
 	}
 
 	if startWith == "save.txt" {
 
 		type Gamestate struct {
-			LiveJose int `json:"LiveJose"`
-			Wordtofind []string `json:"Wordtofind"`
+			LiveJose            int      `json:"LiveJose"`
+			Wordtofind          []string `json:"Wordtofind"`
 			WordPartiallyReveal []string `json:"WordPartiallyReveal"`
-			LetterHistory []string `json:"LetterHistory"`
-			WordHistory []string `json:"WordHistory"`
+			LetterHistory       []string `json:"LetterHistory"`
+			WordHistory         []string `json:"WordHistory"`
 		}
 
-		file, _ := os.Open("save.txt")
-		defer file.Close()
-
 		var restart Gamestate
+
+		file, _ := os.Open("\\resources\\save.txt")
+		defer func(file *os.File) {
+			err := file.Close()
+			if err != nil {
+				fmt.Println("Erreur lors de la fermeture du fichier de sauvegarde")
+			}
+		}(file)
 
 		decoder := json.NewDecoder(file)
 
@@ -73,9 +78,9 @@ func main() {
 		fmt.Println("")
 		fmt.Println("Bon retour parmis nous, votre sauvegarde à préalablement été sauvegardé et est prête à être utilisé !")
 
-		startGame(restart.Wordtofind,restart.WordPartiallyReveal,liveJose)
+		startGame(restart.Wordtofind, restart.WordPartiallyReveal, liveJose)
 
-	}else{
+	} else {
 		ClearTerminal()
 		rules()
 	}
@@ -89,7 +94,11 @@ func ClearTerminal() {
 		cmd = exec.Command("clear")
 	}
 	cmd.Stdout = os.Stdout
-	cmd.Run()
+	err := cmd.Run()
+	if err != nil {
+		fmt.Println("Erreur lors de l'éxécution de la commande de nettoyage du terminal")
+		return
+	}
 }
 
 func rules() {
@@ -98,17 +107,25 @@ func rules() {
 	fmt.Println("- Vous pouvez proposer ou un mot ou une lettre")
 	fmt.Println("- Une mauvaise lettre vous retire" + yellow + " une " + reset + "vie. Mais " + red + "attention" + reset + " car un mauvais mot vous en retire" + yellow + " 2" + reset + " !")
 	fmt.Print("Appuyer sur entrer pour continuer : ")
-	bufio.NewReader(os.Stdin).ReadBytes('\n')
+	_, err := bufio.NewReader(os.Stdin).ReadBytes('\n')
+	if err != nil {
+		fmt.Println("Erreur lors de la lecture de l'entrée standard")
+		return
+	}
 	chooseDifficulty()
 }
 
-func chooseDifficulty(){
-var difficulty int
+func chooseDifficulty() {
+	var difficulty int
 	for i := 0; i <= 1; i++ {
 		ClearTerminal()
 		fmt.Println("")
 		fmt.Print("Choissisez votre niveau de difficulté (1-3), 1: Facile, 2: Moyen, 3: Difficile. Que choissisez-vous : ")
-		fmt.Scanln(&difficulty)
+		_, err := fmt.Scanln(&difficulty)
+		if err != nil {
+			fmt.Println("Erreur lors de la lecture de l'entrée standard")
+			return
+		}
 		if difficulty != 1 && difficulty != 2 && difficulty != 3 {
 			i--
 		} else {
@@ -118,49 +135,67 @@ var difficulty int
 	selectDictionnary(difficulty)
 }
 
-func selectDictionnary(difficulty int){
+func selectDictionnary(difficulty int) {
 	switch difficulty {
 	case 1:
-		absolutePath := currentDir + "\\words.txt"
-		selectDictionnaryPath(absolutePath)
+		absolutePath := currentDir + "\\resources\\dictionnary\\words.txt"
+		selectRandomWordIntoDictionnary(absolutePath)
 	case 2:
-		absolutePath := currentDir + "\\words2.txt"
-		selectDictionnaryPath(absolutePath)
+		absolutePath := currentDir + "\\resources\\dictionnary\\words2.txt"
+		selectRandomWordIntoDictionnary(absolutePath)
 	case 3:
-		absolutePath := currentDir + "\\words3.txt"
-		selectDictionnaryPath(absolutePath)
+		absolutePath := currentDir + "\\resources\\dictionnary\\words3.txt"
+		selectRandomWordIntoDictionnary(absolutePath)
 	}
 }
 
-func selectDictionnaryPath(absolutePath string){
+func selectRandomWordIntoDictionnary(absolutePath string) {
+	var (
+		arrSelectWord   []string
+		word            string
+		numberOfWords   int
+		indexRandomWord int
+	)
+
 	f, _ := os.Open(absolutePath)
-	defer f.Close()
 	scanner := bufio.NewScanner(f)
 	scanner.Split(bufio.ScanWords)
-	var wordList []string
 	for scanner.Scan() {
-		wordList = append(wordList, scanner.Text())
+		numberOfWords++
 	}
-	randomWord(wordList)
-}
+	err := f.Close()
+	if err != nil {
+		fmt.Println("Erreur lors de la fermeture du fichier de dictionnaire")
+		return
+	}
+	indexRandomWord = rand.Intn(numberOfWords)
 
-func randomWord(wordList []string){
-	indexRandomWord := rand.Intn(len(wordList)) - 1 // SELECTIONNE UN MOT AU HASARD DANS LE DICTIONNAIRE ET LE MET DANS UN TABLEAU
-	if indexRandomWord <= 0 {
-		indexRandomWord += 1
+	currentLine := 0
+	f2, _ := os.Open(absolutePath)
+	scanner2 := bufio.NewScanner(f2)
+	scanner2.Split(bufio.ScanWords)
+	for scanner2.Scan() {
+		currentLine++
+		if currentLine == indexRandomWord {
+			word = scanner2.Text()
+			break
+		}
 	}
-	selectWord := wordList[indexRandomWord]
-	var arrSelectWord []string
-	for i := 0; i < len(selectWord); i++ {
-		arrSelectWord = append(arrSelectWord, string(selectWord[i]))
-	} // SELECTIONNE UN MOT AU HASARD DANS LE DICTIONNAIRE ET LE MET DANS UN TABLEAU
+	err2 := f2.Close()
+	if err2 != nil {
+		fmt.Println("Erreur lors de la fermeture du fichier de dictionnaire")
+		return
+	}
+	arrSelectWord = strings.Split(word, "")
 
 	findWordClue(arrSelectWord)
 }
 
-func findWordClue(arrSelectWord []string){
-	n := (len(arrSelectWord) / 2) - 1 //LIS LA CONSIGNE POUR COMPRENDRE
-	var randomClues []int
+func findWordClue(arrSelectWord []string) {
+	var (
+		randomClues []int
+		n           = (len(arrSelectWord) / 2) - 1
+	)
 
 	usedClues := make(map[int]bool)
 	for i := 1; i <= n; i++ {
@@ -179,9 +214,12 @@ func findWordClue(arrSelectWord []string){
 	associateClueToWord(randomClues, arrSelectWord)
 }
 
-func associateClueToWord(randomClues []int, arrSelectWord []string){
-	values := 0 // SERT A AFFICHER SEULEMENT LES LETTRES ALEATOIRES CHOISIS PRECEDEMENT
-	var wordPartiallyReveal []string
+func associateClueToWord(randomClues []int, arrSelectWord []string) {
+	var (
+		values              = 0
+		wordPartiallyReveal []string
+	)
+
 	if len(randomClues) == 0 {
 		for i := 0; i <= len(arrSelectWord)-1; i++ {
 			wordPartiallyReveal = append(wordPartiallyReveal, "_")
@@ -195,7 +233,7 @@ func associateClueToWord(randomClues []int, arrSelectWord []string){
 				} else {
 					values += 1
 				}
-			}else {
+			} else {
 				wordPartiallyReveal = append(wordPartiallyReveal, "_")
 			} // SERT A AFFICHER SEULEMENT LES LETTRES ALEATOIRES CHOISIS PRECEDEMENT
 		}
@@ -205,13 +243,11 @@ func associateClueToWord(randomClues []int, arrSelectWord []string){
 	fmt.Print("\nLe mot avec le(s) indice(s) est : ")
 	printWordPartiallyReveal(wordPartiallyReveal)
 	fmt.Println("")
-	fmt.Println(arrSelectWord)
-	startGame(arrSelectWord,wordPartiallyReveal,10)
+	startGame(arrSelectWord, wordPartiallyReveal, 10)
 }
 
-
-func startGame(arrSelectWord []string, wordPartiallyReveal [] string, liveJose int) {
-	var choiceToLowerStrings  []string
+func startGame(arrSelectWord []string, wordPartiallyReveal []string, liveJose int) {
+	var choiceToLowerStrings []string
 	var choiceToLower string
 	var choice string
 
@@ -231,32 +267,40 @@ func startGame(arrSelectWord []string, wordPartiallyReveal [] string, liveJose i
 	for i := 0; i <= 1; i++ {
 		choiceToLowerStrings = nil
 		fmt.Print("Entrez votre lettre ou votre mot : ")
-		fmt.Scan(&choice)
+		_, err := fmt.Scan(&choice)
+		if err != nil {
+			fmt.Println("Erreur lors de la lecture de l'entrée standard")
+			return
+		}
 		choiceToLower = strings.ToLower(choice)
-		if choiceToLower == "stop"{
+		if choiceToLower == "stop" {
 
 			type Gamestate struct {
-				LiveJose int
-				Wordtofind []string
+				LiveJose            int
+				Wordtofind          []string
 				WordPartiallyReveal []string
-				LetterHistory []string
-				WordHistory []string
+				LetterHistory       []string
+				WordHistory         []string
 			}
 
 			saveGame := Gamestate{
-				LiveJose: liveJose,
-				Wordtofind: arrSelectWord,
+				LiveJose:            liveJose,
+				Wordtofind:          arrSelectWord,
 				WordPartiallyReveal: wordPartiallyReveal,
-				LetterHistory: letterHistory,
-				WordHistory: wordHistory,
+				LetterHistory:       letterHistory,
+				WordHistory:         wordHistory,
 			}
 
-			save, err := json.Marshal(saveGame)
-			if err != nil {
+			save, err1 := json.Marshal(saveGame)
+			if err1 != nil {
 				fmt.Println("Erreur lors de la sauvegarde de la partie")
 			}
 
-			os.WriteFile("save.txt", save, 0644)
+			err2 := os.WriteFile("save.txt", save, 0644)
+			if err2 != nil {
+				fmt.Println("Erreur lors de la sauvegarde de la partie")
+				return
+			}
 
 			ClearTerminal()
 
@@ -298,7 +342,7 @@ func startGame(arrSelectWord []string, wordPartiallyReveal [] string, liveJose i
 			letterHistory = append(letterHistory, choiceToLowerStrings[i])
 			letterHistoryEnd = append(letterHistoryEnd, choiceToLowerStrings[i])
 		}
-	}else{
+	} else {
 		wordHistory = append(wordHistory, choiceToLower)
 	}
 	refreshWord(arrSelectWord, wordPartiallyReveal, choiceToLowerStrings)
@@ -327,10 +371,10 @@ func refreshWord(arrSelectWord []string, wordPartiallyReveal []string, choiceToL
 		}
 	}
 	printWordPartiallyReveal(wordPartiallyReveal)
-	histroy(choiceToLowerStrings, letterFind, wordFind,wordPartiallyReveal,arrSelectWord)
+	histroy(choiceToLowerStrings, letterFind, wordFind, wordPartiallyReveal, arrSelectWord)
 }
 
-func histroy (choiceToLowerStrings []string, letterFind bool, wordFind bool,wordPartiallyReveal []string, arrSelectWord []string){
+func histroy(choiceToLowerStrings []string, letterFind bool, wordFind bool, wordPartiallyReveal []string, arrSelectWord []string) {
 	counter := 0
 	letterAlreadyUse := false
 	wordAlreadyUse := false
@@ -349,7 +393,7 @@ func histroy (choiceToLowerStrings []string, letterFind bool, wordFind bool,word
 				}
 			}
 		}
-	}else{
+	} else {
 		var wordTry string
 		for i := 0; i < len(choiceToLowerStrings); i++ {
 			wordTry = wordTry + choiceToLowerStrings[i]
@@ -369,60 +413,59 @@ func histroy (choiceToLowerStrings []string, letterFind bool, wordFind bool,word
 			}
 		}
 	}
-	checkElementUses(choiceToLowerStrings,letterFind, wordFind, letterAlreadyUse, wordPartiallyReveal,arrSelectWord, wordAlreadyUse)
+	checkElementUses(choiceToLowerStrings, letterFind, wordFind, letterAlreadyUse, wordPartiallyReveal, arrSelectWord, wordAlreadyUse)
 }
 
-func checkElementUses(choiceToLowerStrings [] string,letterFind bool, wordFind bool, letterAlreadyUse bool, wordPartiallyReveal []string, arrSelectWord []string, wordAlreadyUse bool){
+func checkElementUses(choiceToLowerStrings []string, letterFind bool, wordFind bool, letterAlreadyUse bool, wordPartiallyReveal []string, arrSelectWord []string, wordAlreadyUse bool) {
 	if letterAlreadyUse == true {
-			ClearTerminal()
-			fmt.Println(red+"Vous avez déjà essayé cette lettre, attention !"+reset)
-			startGame(arrSelectWord,wordPartiallyReveal,liveJose)
-	}else if wordAlreadyUse == true {
 		ClearTerminal()
-		fmt.Println(red+"Vous avez déjà essayé ce mot, attention !"+reset)
-		startGame(arrSelectWord,wordPartiallyReveal,liveJose)
+		fmt.Println(red + "Vous avez déjà essayé cette lettre, attention !" + reset)
+		startGame(arrSelectWord, wordPartiallyReveal, liveJose)
+	} else if wordAlreadyUse == true {
+		ClearTerminal()
+		fmt.Println(red + "Vous avez déjà essayé ce mot, attention !" + reset)
+		startGame(arrSelectWord, wordPartiallyReveal, liveJose)
 	}
 	fmt.Println("")
-	findLetter(choiceToLowerStrings,wordPartiallyReveal,arrSelectWord,letterFind,wordFind)
+	findLetter(choiceToLowerStrings, wordPartiallyReveal, arrSelectWord, letterFind, wordFind)
 }
 
-
-func findLetter(choiceToLowerStrings [] string,wordPartiallyReveal []string,arrSelectWord []string, letterFind bool, wordFind bool){
+func findLetter(choiceToLowerStrings []string, wordPartiallyReveal []string, arrSelectWord []string, letterFind bool, wordFind bool) {
 	if len(choiceToLowerStrings) == 1 {
-	if letterFind == true{
-		ClearTerminal()
-		fmt.Println(green+"Bonne lettre !"+reset)
-		fmt.Println("")
-		fmt.Printf("Pour le moment le mot ressemble à ca -> ")
-		printWordPartiallyReveal(wordPartiallyReveal)
-		checkWordFind(wordPartiallyReveal,arrSelectWord)
-	}else if letterFind == false {
-		liveJose--
-		ClearTerminal()
-		fmt.Println(red + "Mauvaise lettre !" + reset)
-		fmt.Println("")
-		fmt.Printf("Pour le moment le mot ressemble à ca -> ")
-		printWordPartiallyReveal(wordPartiallyReveal)
-		checkWordFind(wordPartiallyReveal, arrSelectWord)
-	}
-	}else{
-		if wordFind == false{
-			liveJose = liveJose - 2
+		if letterFind == true {
 			ClearTerminal()
-			fmt.Println(red+"Mauvais mot !"+reset)
+			fmt.Println(green + "Bonne lettre !" + reset)
 			fmt.Println("")
 			fmt.Printf("Pour le moment le mot ressemble à ca -> ")
 			printWordPartiallyReveal(wordPartiallyReveal)
-			checkWordFind(wordPartiallyReveal,arrSelectWord)
-		}else if wordFind == true{
+			checkWordFind(wordPartiallyReveal, arrSelectWord)
+		} else if letterFind == false {
+			liveJose--
+			ClearTerminal()
+			fmt.Println(red + "Mauvaise lettre !" + reset)
+			fmt.Println("")
+			fmt.Printf("Pour le moment le mot ressemble à ca -> ")
+			printWordPartiallyReveal(wordPartiallyReveal)
+			checkWordFind(wordPartiallyReveal, arrSelectWord)
+		}
+	} else {
+		if wordFind == false {
+			liveJose = liveJose - 2
+			ClearTerminal()
+			fmt.Println(red + "Mauvais mot !" + reset)
+			fmt.Println("")
+			fmt.Printf("Pour le moment le mot ressemble à ca -> ")
+			printWordPartiallyReveal(wordPartiallyReveal)
+			checkWordFind(wordPartiallyReveal, arrSelectWord)
+		} else if wordFind == true {
 			ClearTerminal()
 			printWordPartiallyReveal(wordPartiallyReveal)
-			checkWordFind(wordPartiallyReveal,arrSelectWord)
+			checkWordFind(wordPartiallyReveal, arrSelectWord)
 		}
 	}
 }
 
-func checkWordFind(wordPartiallyReveal []string,arrSelectWord []string) {
+func checkWordFind(wordPartiallyReveal []string, arrSelectWord []string) {
 	wordFind := true
 	for _, letter := range wordPartiallyReveal {
 		if letter == "_" {
@@ -432,7 +475,7 @@ func checkWordFind(wordPartiallyReveal []string,arrSelectWord []string) {
 	}
 	if wordFind == true {
 		ClearTerminal()
-		fmt.Println("\n"+ green + "Vous avez deviné le mot !"+ reset)
+		fmt.Println("\n" + green + "Vous avez deviné le mot !" + reset)
 		if len(letterHistory) > 0 {
 			fmt.Print("Les lettres essayés ont été : ")
 			printLetterHistoryInGame()
@@ -444,13 +487,13 @@ func checkWordFind(wordPartiallyReveal []string,arrSelectWord []string) {
 		fmt.Print("Le mot était : ")
 		printWordPartiallyReveal(wordPartiallyReveal)
 		fmt.Println("")
-	}else if liveJose <= 0{
+	} else if liveJose <= 0 {
 		ClearTerminal()
-		fmt.Print("\n"+ red+"Vous n'avez plus de vie !"+reset + "\nLe mot était : ")
+		fmt.Print("\n" + red + "Vous n'avez plus de vie !" + reset + "\nLe mot était : ")
 		printWordPartiallyReveal(wordPartiallyReveal)
 		fmt.Println("")
 		fmt.Println("")
-		printJose(71,78)
+		printJose(71, 78)
 		if len(letterHistory) > 0 {
 			fmt.Print("Les lettres essayés ont été : ")
 			printLetterHistoryInGame()
@@ -459,14 +502,13 @@ func checkWordFind(wordPartiallyReveal []string,arrSelectWord []string) {
 			fmt.Print("Les mots essayés ont été : ")
 			printWordHistory()
 		}
-		fmt.Println(red+"Vous êtes pendu !"+reset)
-	}else{
-		startGame(arrSelectWord,wordPartiallyReveal,liveJose)
+		fmt.Println(red + "Vous êtes pendu !" + reset)
+	} else {
+		startGame(arrSelectWord, wordPartiallyReveal, liveJose)
 	}
 }
 
-
-//Début des fonctions d'affichage
+// Début des fonctions d'affichage
 func printWordPartiallyReveal(wordPartiallyReveal []string) {
 	wordPartiallyRevealString := strings.Join(wordPartiallyReveal, "")
 	arrRune := []rune(wordPartiallyRevealString)
@@ -476,7 +518,6 @@ func printWordPartiallyReveal(wordPartiallyReveal []string) {
 				startLine := int((arrRune[j] - 32) * 9)
 				endLine := int(((arrRune[j] + 1) - 32) * 9)
 				file, _ := os.Open(pathAscii)
-				defer file.Close()
 				scanner := bufio.NewScanner(file)
 				currentLine := 0
 				for scanner.Scan() {
@@ -487,23 +528,31 @@ func printWordPartiallyReveal(wordPartiallyReveal []string) {
 						break
 					}
 					if currentLine >= endLine {
-						file.Close()
+						err := file.Close()
+						if err != nil {
+							fmt.Println("Erreur lors de la fermeture du fichier ascii")
+							return
+						}
 						break
 					}
 				}
-				file.Seek(0, 0)
+				_, err := file.Seek(0, 0)
+				if err != nil {
+					fmt.Println("Erreur lors de la remise du pointeur du fichier ascii")
+					return
+				}
 			}
 			fmt.Println()
 		}
-		}else{
-			for i := 0; i < len(wordPartiallyReveal); i++ {
-				fmt.Print(wordPartiallyReveal[i])
-			}
-			fmt.Println("")
+	} else {
+		for i := 0; i < len(wordPartiallyReveal); i++ {
+			fmt.Print(wordPartiallyReveal[i])
 		}
+		fmt.Println("")
+	}
 }
 
-func printLetterHistoryInGame(){
+func printLetterHistoryInGame() {
 	for i := 0; i <= len(letterHistory)-1; i++ {
 		fmt.Print(letterHistory[i])
 		fmt.Print(" ")
@@ -511,37 +560,22 @@ func printLetterHistoryInGame(){
 	fmt.Println("")
 }
 
-func printWordHistory(){
+func printWordHistory() {
 	for i := 0; i < len(wordHistory); i++ {
-	fmt.Print(wordHistory[i])
+		fmt.Print(wordHistory[i])
 		fmt.Print(" ")
 	}
-	fmt.Println("")
-}
-																		//A séparer dans des dossiers
-func printLetterHistoryEnd()  {
-	for i := 0; i <= len(letterHistoryEnd)-1; i++ {
-		fmt.Print(letterHistoryEnd[i])
-		fmt.Print(" ")
-	}
-	fmt.Println("")
 	fmt.Println("")
 }
 
-func printWord(arrSelectWord []string){
-	for i := 0; i < len(arrSelectWord); i++ {
-		fmt.Print(arrSelectWord[i])
-	}
-}
+// A séparer dans des dossiers
+
 //Fin des fonctions d'affichage
 
-
-
-//Debut fonction position Jose
-func printJose(startLine int ,endLine int){
-	absolutePath := currentDir + "\\hangman.txt"
+// Debut fonction position Jose
+func printJose(startLine int, endLine int) {
+	absolutePath := currentDir + "\\resources\\hangman.txt"
 	file, _ := os.Open(absolutePath)
-	defer file.Close()
 	scanner := bufio.NewScanner(file)
 	currentLine := 0
 	for scanner.Scan() {
@@ -550,12 +584,17 @@ func printJose(startLine int ,endLine int){
 			fmt.Println(scanner.Text())
 		}
 		if currentLine > endLine {
-			file.Close()
+			err := file.Close()
+			if err != nil {
+				fmt.Println("Erreur lors de la fermeture du fichier hangman")
+				return
+			}
 			break
 		}
 	}
 }
-																	//A séparer dans des dossiers
+
+// A séparer dans des dossiers
 func printLive(liveJose int) {
 	switch liveJose {
 	case 10:
@@ -580,4 +619,5 @@ func printLive(liveJose int) {
 		printJose(63, 70)
 	}
 }
+
 //Fin fonction position Jose
