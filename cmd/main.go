@@ -8,21 +8,13 @@ import (
 	"os"
 )
 
-var yellow = "\033[33m"
-var red = "\033[31m"
-var green = "\033[32m"
-var reset = "\033[0m"
-
-var liveJose = 10
-var choiceToLowerRune []rune
-var letterHistory []string
-var wordHistory []string
-var currentDir, _ = os.Getwd()
-var startWith string
-var asciiMode string
-var pathAscii string
-
 func main() {
+	var (
+		currentDir, _ = os.Getwd()
+		startWith     string
+		asciiMode     string
+		pathAscii     string
+	)
 
 	flag.StringVar(&asciiMode, "letterFile", "", "Select Ascii Mode")
 	flag.StringVar(&startWith, "startWith", "", "Start with the save file")
@@ -49,11 +41,11 @@ func main() {
 	if startWith == "save.txt" {
 
 		type Gamestate struct {
-			LiveJose            int      `json:"LiveJose"`
-			Wordtofind          []string `json:"Wordtofind"`
+			ArrSelectWord       []string `json:"Wordtofind"`
 			WordPartiallyReveal []string `json:"WordPartiallyReveal"`
 			LetterHistory       []string `json:"LetterHistory"`
 			WordHistory         []string `json:"WordHistory"`
+			LiveJose            int      `json:"LiveJose"`
 		}
 
 		var restart Gamestate
@@ -73,18 +65,14 @@ func main() {
 			fmt.Println("Erreur lors du décodage du fichier de sauvegarde")
 		}
 
-		letterHistory = restart.LetterHistory
-		wordHistory = restart.WordHistory
-		liveJose = restart.LiveJose
-
 		Util.ClearTerminal()
 		fmt.Println("")
 		fmt.Println("Bon retour parmis nous, votre sauvegarde à préalablement été sauvegardé et est prête à être utilisé !")
 
-		Util.StartGame(restart.Wordtofind, restart.WordPartiallyReveal, liveJose)
+		Util.StartGame(asciiMode, pathAscii, restart.ArrSelectWord, restart.WordPartiallyReveal, restart.LetterHistory, restart.WordHistory, restart.LiveJose)
 
 	} else {
 		Util.ClearTerminal()
-		Util.PrintRules()
+		Util.PrintRules(asciiMode, pathAscii)
 	}
 }

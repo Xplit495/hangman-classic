@@ -9,40 +9,43 @@ import (
 	"strings"
 )
 
-func selectDifficulty() {
+func selectDifficulty(asciiMode string, pathAscii string) {
 	var difficulty int
 	for i := 0; i <= 1; i++ {
 		ClearTerminal()
 		fmt.Println("")
 		fmt.Print("Choissisez votre niveau de difficulté (1-3), 1: Facile, 2: Moyen, 3: Difficile. Que choissisez-vous : ")
-		fmt.Scanln(&difficulty)
+		_, err := fmt.Scanln(&difficulty)
+		if err != nil {
+			fmt.Println("Erreur lors de la lecture de l'entrée standard")
+		}
 		if difficulty != 1 && difficulty != 2 && difficulty != 3 {
 			i--
 		} else {
 			break
 		}
 	}
-	selectDictionnaryPath(difficulty)
+	selectDictionnaryPath(asciiMode, pathAscii, difficulty)
 }
 
-func selectDictionnaryPath(difficulty int) {
+func selectDictionnaryPath(asciiMode string, pathAscii string, difficulty int) {
 	currentDir, _ := os.Getwd()
 	dictionnaryPath := currentDir + "\\resources\\dictionnary"
 
 	switch difficulty {
 	case 1:
 		absolutePath := dictionnaryPath + "words.txt"
-		selectRandomWordIntoDictionnary(absolutePath)
+		selectRandomWordIntoDictionnary(asciiMode, pathAscii, absolutePath)
 	case 2:
 		absolutePath := dictionnaryPath + "words2.txt"
-		selectRandomWordIntoDictionnary(absolutePath)
+		selectRandomWordIntoDictionnary(asciiMode, pathAscii, absolutePath)
 	case 3:
 		absolutePath := dictionnaryPath + "words3.txt"
-		selectRandomWordIntoDictionnary(absolutePath)
+		selectRandomWordIntoDictionnary(asciiMode, pathAscii, absolutePath)
 	}
 }
 
-func selectRandomWordIntoDictionnary(absolutePath string) {
+func selectRandomWordIntoDictionnary(asciiMode string, pathAscii string, absolutePath string) {
 	var (
 		arrSelectWord   []string
 		word            string
@@ -81,10 +84,10 @@ func selectRandomWordIntoDictionnary(absolutePath string) {
 	}
 	arrSelectWord = strings.Split(word, "")
 
-	generateWordClue(arrSelectWord)
+	generateWordClue(asciiMode, pathAscii, arrSelectWord)
 }
 
-func generateWordClue(arrSelectWord []string) {
+func generateWordClue(asciiMode string, pathAscii string, arrSelectWord []string) {
 	var (
 		randomClues []int
 		n           = (len(arrSelectWord) / 2) - 1
@@ -104,13 +107,16 @@ func generateWordClue(arrSelectWord []string) {
 	}
 	sort.Ints(randomClues)
 
-	associateClueToWord(randomClues, arrSelectWord)
+	associateClueToWord(asciiMode, pathAscii, randomClues, arrSelectWord)
 }
 
-func associateClueToWord(randomClues []int, arrSelectWord []string) {
+func associateClueToWord(asciiMode string, pathAscii string, randomClues []int, arrSelectWord []string) {
 	var (
 		values              = 0
 		wordPartiallyReveal []string
+		letterHistory       []string
+		wordHistory         []string
+		liveJose            = 10
 	)
 
 	if len(randomClues) == 0 {
@@ -134,7 +140,7 @@ func associateClueToWord(randomClues []int, arrSelectWord []string) {
 
 	fmt.Println("")
 	fmt.Print("\nLe mot avec le(s) indice(s) est : ")
-	printWordPartiallyReveal(wordPartiallyReveal)
+	printWordPartiallyReveal(asciiMode, pathAscii, wordPartiallyReveal)
 	fmt.Println("")
-	StartGame(arrSelectWord, wordPartiallyReveal, 10)
+	StartGame(asciiMode, pathAscii, arrSelectWord, wordPartiallyReveal, letterHistory, wordHistory, liveJose)
 }

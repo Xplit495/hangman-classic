@@ -1,6 +1,6 @@
 package util
 
-func updateHistroy(choiceToLowerStrings []string, letterFind bool, wordFind bool, wordPartiallyReveal []string, arrSelectWord []string) {
+func updateHistroy(asciiMode string, pathAscii string, arrSelectWord []string, wordPartiallyReveal []string, letterHistory []string, wordHistory []string, liveJose int, choiceToLowerStrings []string, letterFind bool, wordFind bool) {
 	counter := 0
 	letterAlreadyUse := false
 	wordAlreadyUse := false
@@ -39,5 +39,5 @@ func updateHistroy(choiceToLowerStrings []string, letterFind bool, wordFind bool
 			}
 		}
 	}
-	checkElementUses(choiceToLowerStrings, letterFind, wordFind, letterAlreadyUse, wordPartiallyReveal, arrSelectWord, wordAlreadyUse)
+	checkInputAlreadyUses(asciiMode, pathAscii, arrSelectWord, wordPartiallyReveal, letterHistory, wordHistory, liveJose, choiceToLowerStrings, letterFind, wordFind, letterAlreadyUse, wordAlreadyUse)
 }

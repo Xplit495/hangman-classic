@@ -12,10 +12,11 @@ import (
 var (
 	yellow = "\033[33m"
 	red    = "\033[31m"
+	green  = "\033[32m"
 	reset  = "\033[0m"
 )
 
-func printAscii(wordToPrintInAscii []string) {
+func printAscii(pathAscii string, wordToPrintInAscii []string) {
 	wordPartiallyRevealString := strings.Join(wordToPrintInAscii, "")
 	arrRune := []rune(wordPartiallyRevealString)
 	for i := 0; i < 9; i++ {
@@ -51,9 +52,9 @@ func printAscii(wordToPrintInAscii []string) {
 	}
 }
 
-func printWordPartiallyReveal(wordPartiallyReveal []string) {
+func printWordPartiallyReveal(asciiMode string, pathAscii string, wordPartiallyReveal []string) {
 	if asciiMode != "" {
-		printAscii(wordPartiallyReveal)
+		printAscii(pathAscii, wordPartiallyReveal)
 	} else {
 		for i := 0; i < len(wordPartiallyReveal); i++ {
 			fmt.Print(wordPartiallyReveal[i])
@@ -62,9 +63,9 @@ func printWordPartiallyReveal(wordPartiallyReveal []string) {
 	}
 }
 
-func printWord(arrSelectWord []string) {
+func printWord(asciiMode string, pathAscii string, arrSelectWord []string) {
 	if asciiMode != "" {
-		printAscii(arrSelectWord)
+		printAscii(pathAscii, arrSelectWord)
 	} else {
 		for i := 0; i < len(arrSelectWord); i++ {
 			fmt.Print(arrSelectWord[i])
@@ -73,7 +74,7 @@ func printWord(arrSelectWord []string) {
 	fmt.Println("")
 }
 
-func printLetterHistory() {
+func printLetterHistory(letterHistory []string) {
 	for i := 0; i <= len(letterHistory)-1; i++ {
 		fmt.Print(letterHistory[i])
 		fmt.Print(" ")
@@ -81,7 +82,7 @@ func printLetterHistory() {
 	fmt.Println("")
 }
 
-func printWordHistory() {
+func printWordHistory(wordHistory []string) {
 	for i := 0; i < len(wordHistory); i++ {
 		fmt.Print(wordHistory[i])
 		fmt.Print(" ")
@@ -104,7 +105,7 @@ func ClearTerminal() {
 	}
 }
 
-func PrintRules() {
+func PrintRules(asciiMode string, pathAscii string) {
 	fmt.Println("")
 	fmt.Println("Bienvenue dans ce super jeu, les régles sont simples :")
 	fmt.Println("- Vous pouvez proposer ou un mot ou une lettre")
@@ -115,5 +116,5 @@ func PrintRules() {
 		fmt.Println("Erreur lors de la lecture de l'entrée standard")
 		return
 	}
-	selectDifficulty()
+	selectDifficulty(asciiMode, pathAscii)
 }

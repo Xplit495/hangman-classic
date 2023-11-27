@@ -1,8 +1,11 @@
 package util
 
-func updateWord(arrSelectWord []string, wordPartiallyReveal []string, choiceToLowerStrings []string) {
-	letterFind := false
-	wordFind := false
+func updateWord(asciiMode string, pathAscii string, arrSelectWord []string, wordPartiallyReveal []string, letterHistory []string, wordHistory []string, liveJose int, choiceToLowerStrings []string) {
+	var (
+		letterFind = false
+		wordFind   = false
+	)
+
 	if len(choiceToLowerStrings) == 1 {
 		for index, letter := range arrSelectWord {
 			if letter == choiceToLowerStrings[0] {
@@ -22,6 +25,6 @@ func updateWord(arrSelectWord []string, wordPartiallyReveal []string, choiceToLo
 			wordFind = true
 		}
 	}
-	printWordPartiallyReveal(wordPartiallyReveal)
-	histroy(choiceToLowerStrings, letterFind, wordFind, wordPartiallyReveal, arrSelectWord)
+	printWordPartiallyReveal(asciiMode, pathAscii, wordPartiallyReveal)
+	updateHistroy(asciiMode, pathAscii, arrSelectWord, wordPartiallyReveal, letterHistory, wordHistory, liveJose, choiceToLowerStrings, letterFind, wordFind)
 }

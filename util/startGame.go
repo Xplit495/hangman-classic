@@ -5,10 +5,13 @@ import (
 	"strings"
 )
 
-func StartGame(arrSelectWord []string, wordPartiallyReveal []string, liveJose int) {
-	var choiceToLowerStrings []string
-	var choiceToLower string
-	var choice string
+func StartGame(asciiMode string, pathAscii string, arrSelectWord []string, wordPartiallyReveal []string, letterHistory []string, wordHistory []string, liveJose int) {
+	var (
+		choice               string
+		choiceToLower        string
+		choiceToLowerStrings []string
+		choiceToLowerRune    []rune
+	)
 
 	chooseLiveJose(liveJose)
 	fmt.Println("")
@@ -16,11 +19,11 @@ func StartGame(arrSelectWord []string, wordPartiallyReveal []string, liveJose in
 	fmt.Println("")
 	if len(letterHistory) > 0 {
 		fmt.Print("Les lettres déjà essayé sont : ")
-		printLetterHistory()
+		printLetterHistory(letterHistory)
 	}
 	if len(wordHistory) > 0 {
 		fmt.Print("Les mots déjà essayé sont : ")
-		printWordHistory()
+		printWordHistory(wordHistory)
 	}
 
 	for i := 0; i <= 1; i++ {
@@ -34,7 +37,7 @@ func StartGame(arrSelectWord []string, wordPartiallyReveal []string, liveJose in
 		choiceToLower = strings.ToLower(choice)
 
 		if choiceToLower == "stop" {
-			//////////////////////////////////////// CreateGameSave ////////////////////////////////////////
+			createGameSave(arrSelectWord, wordPartiallyReveal, letterHistory, wordHistory, liveJose)
 		}
 
 		choiceToLowerRune = []rune(choiceToLower)
@@ -71,5 +74,5 @@ func StartGame(arrSelectWord []string, wordPartiallyReveal []string, liveJose in
 	} else {
 		wordHistory = append(wordHistory, choiceToLower)
 	}
-	updateWord(arrSelectWord, wordPartiallyReveal, choiceToLowerStrings)
+	updateWord(asciiMode, pathAscii, arrSelectWord, wordPartiallyReveal, letterHistory, wordHistory, liveJose, choiceToLowerStrings)
 }

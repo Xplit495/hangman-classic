@@ -6,22 +6,22 @@ import (
 	"os"
 )
 
-func createGameSave(arrSelectWord []string, wordPartiallyReveal []string, liveJose int) {
+func createGameSave(arrSelectWord []string, wordPartiallyReveal []string, letterHistory []string, wordHistory []string, liveJose int) {
 
 	type Gamestate struct {
-		LiveJose            int
-		Wordtofind          []string
+		ArrSelectWord       []string
 		WordPartiallyReveal []string
 		LetterHistory       []string
 		WordHistory         []string
+		LiveJose            int
 	}
 
 	saveGame := Gamestate{
-		LiveJose:            liveJose,
-		Wordtofind:          arrSelectWord,
+		ArrSelectWord:       arrSelectWord,
 		WordPartiallyReveal: wordPartiallyReveal,
 		LetterHistory:       letterHistory,
 		WordHistory:         wordHistory,
+		LiveJose:            liveJose,
 	}
 
 	save, err1 := json.Marshal(saveGame)
@@ -29,6 +29,7 @@ func createGameSave(arrSelectWord []string, wordPartiallyReveal []string, liveJo
 		fmt.Println("Erreur lors de la sauvegarde de la partie")
 	}
 
+	currentDir, _ := os.Getwd()
 	err2 := os.WriteFile(currentDir+"\\resources\\save.txt", save, 0644)
 	if err2 != nil {
 		fmt.Println("Erreur lors de la sauvegarde de la partie")
