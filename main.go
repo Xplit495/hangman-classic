@@ -473,30 +473,32 @@ func checkWordFind(wordPartiallyReveal []string,arrSelectWord []string) {
 func printWordPartiallyReveal(wordPartiallyReveal []string) {
 	wordPartiallyRevealString := strings.Join(wordPartiallyReveal, "")
 	arrRune := []rune(wordPartiallyRevealString)
-
 	if asciiMode != "" {
-		for i := 0; i < len(wordPartiallyReveal); i++ {
-			startLine := int((arrRune[i] - 32) * 9)
-			endLine := int(((arrRune[i] + 1) - 32) * 9)
-
-			file, _ := os.Open(pathAscii)
-			defer file.Close()
-
-			scanner := bufio.NewScanner(file)
-			currentLine := 0
-
-
-			for scanner.Scan() {
-				currentLine++
-				if currentLine >= startLine && currentLine <= endLine {
-					fmt.Println(scanner.Text())
+		nbLines := 9
+		space := "  "
+		for i := 0; i < nbLines; i++ {
+			for j := 0; j < len(wordPartiallyReveal); j++ {
+				startLine := int((arrRune[j] - 32) * 9)
+				endLine := int(((arrRune[j] + 1) - 32) * 9)
+				file, _ := os.Open(pathAscii)
+				defer file.Close()
+				scanner := bufio.NewScanner(file)
+				currentLine := 0
+				for scanner.Scan() {
+					currentLine++
+					if currentLine == startLine+i+1 {
+						fmt.Print(scanner.Text())
+						fmt.Print(space)
+						break
+					}
+					if currentLine >= endLine {
+						file.Close()
+						break
+					}
 				}
-				if currentLine >= endLine {
-					file.Close()
-					break
-				}
+				file.Seek(0, 0)
 			}
-			file.Seek(0, 0)
+			fmt.Println()
 		}
 
 	}else{
@@ -506,6 +508,7 @@ func printWordPartiallyReveal(wordPartiallyReveal []string) {
 		fmt.Println("")
 	}
 }
+
 
 func printLetterHistoryInGame(){
 	for i := 0; i <= len(letterHistory)-1; i++ {
@@ -518,9 +521,9 @@ func printLetterHistoryInGame(){
 func printWordHistory(){
 	for i := 0; i < len(wordHistory); i++ {
 	fmt.Print(wordHistory[i])
-		fmt.Print(" ")
+		fmt.Println(" ")
 	}
-	fmt.Println("")
+	fmt.Print("")
 }
 																		//A séparer dans des dossiers
 func printLetterHistoryEnd()  {
