@@ -28,8 +28,7 @@ func printJose(startLine int, endLine int) {
 	}
 }
 
-// A séparer dans des dossiers
-func printLive(liveJose int) {
+func chooseLiveJose(liveJose int) {
 	switch liveJose {
 	case 10:
 		fmt.Print("")

@@ -9,10 +9,10 @@ import (
 	"strings"
 )
 
-func chooseDifficulty() {
+func selectDifficulty() {
 	var difficulty int
 	for i := 0; i <= 1; i++ {
-		util.ClearTerminal()
+		ClearTerminal()
 		fmt.Println("")
 		fmt.Print("Choissisez votre niveau de difficulté (1-3), 1: Facile, 2: Moyen, 3: Difficile. Que choissisez-vous : ")
 		fmt.Scanln(&difficulty)
@@ -22,10 +22,10 @@ func chooseDifficulty() {
 			break
 		}
 	}
-	selectDictionnary(difficulty)
+	selectDictionnaryPath(difficulty)
 }
 
-func selectDictionnary(difficulty int) {
+func selectDictionnaryPath(difficulty int) {
 	currentDir, _ := os.Getwd()
 	dictionnaryPath := currentDir + "\\resources\\dictionnary"
 
@@ -81,10 +81,10 @@ func selectRandomWordIntoDictionnary(absolutePath string) {
 	}
 	arrSelectWord = strings.Split(word, "")
 
-	findWordClue(arrSelectWord)
+	generateWordClue(arrSelectWord)
 }
 
-func findWordClue(arrSelectWord []string) {
+func generateWordClue(arrSelectWord []string) {
 	var (
 		randomClues []int
 		n           = (len(arrSelectWord) / 2) - 1
@@ -134,7 +134,7 @@ func associateClueToWord(randomClues []int, arrSelectWord []string) {
 
 	fmt.Println("")
 	fmt.Print("\nLe mot avec le(s) indice(s) est : ")
-	util.printWordPartiallyReveal(wordPartiallyReveal)
+	printWordPartiallyReveal(wordPartiallyReveal)
 	fmt.Println("")
-	startGame(arrSelectWord, wordPartiallyReveal, 10)
+	StartGame(arrSelectWord, wordPartiallyReveal, 10)
 }
