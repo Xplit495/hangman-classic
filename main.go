@@ -35,9 +35,6 @@ func main() {
 
 	flag.Parse()
 
-	asciiMode = "standard.txt"
-
-
 	if asciiMode == "standard.txt" {
 		pathAscii = currentDir + "\\standard.txt"
 	}else if asciiMode == "shadow.txt" {
@@ -78,10 +75,10 @@ func main() {
 
 		startGame(restart.Wordtofind,restart.WordPartiallyReveal,liveJose)
 
+	}else{
+		ClearTerminal()
+		rules()
 	}
-
-	ClearTerminal()
-	rules()
 }
 
 func ClearTerminal() {
@@ -445,12 +442,12 @@ func checkWordFind(wordPartiallyReveal []string,arrSelectWord []string) {
 			printWordHistory()
 		}
 		fmt.Print("Le mot était : ")
-		printWord(arrSelectWord)
+		printWordPartiallyReveal(wordPartiallyReveal)
 		fmt.Println("")
 	}else if liveJose <= 0{
 		ClearTerminal()
 		fmt.Print("\n"+ red+"Vous n'avez plus de vie !"+reset + "\nLe mot était : ")
-		printWord(arrSelectWord)
+		printWordPartiallyReveal(wordPartiallyReveal)
 		fmt.Println("")
 		fmt.Println("")
 		printJose(71,78)
@@ -474,9 +471,7 @@ func printWordPartiallyReveal(wordPartiallyReveal []string) {
 	wordPartiallyRevealString := strings.Join(wordPartiallyReveal, "")
 	arrRune := []rune(wordPartiallyRevealString)
 	if asciiMode != "" {
-		nbLines := 9
-		space := "  "
-		for i := 0; i < nbLines; i++ {
+		for i := 0; i < 9; i++ {
 			for j := 0; j < len(wordPartiallyReveal); j++ {
 				startLine := int((arrRune[j] - 32) * 9)
 				endLine := int(((arrRune[j] + 1) - 32) * 9)
@@ -488,7 +483,7 @@ func printWordPartiallyReveal(wordPartiallyReveal []string) {
 					currentLine++
 					if currentLine == startLine+i+1 {
 						fmt.Print(scanner.Text())
-						fmt.Print(space)
+						fmt.Print("  ")
 						break
 					}
 					if currentLine >= endLine {
@@ -500,15 +495,13 @@ func printWordPartiallyReveal(wordPartiallyReveal []string) {
 			}
 			fmt.Println()
 		}
-
-	}else{
-		for i := 0; i < len(wordPartiallyReveal); i++ {
-			fmt.Print(wordPartiallyReveal[i])
+		}else{
+			for i := 0; i < len(wordPartiallyReveal); i++ {
+				fmt.Print(wordPartiallyReveal[i])
+			}
+			fmt.Println("")
 		}
-		fmt.Println("")
-	}
 }
-
 
 func printLetterHistoryInGame(){
 	for i := 0; i <= len(letterHistory)-1; i++ {
@@ -521,9 +514,9 @@ func printLetterHistoryInGame(){
 func printWordHistory(){
 	for i := 0; i < len(wordHistory); i++ {
 	fmt.Print(wordHistory[i])
-		fmt.Println(" ")
+		fmt.Print(" ")
 	}
-	fmt.Print("")
+	fmt.Println("")
 }
 																		//A séparer dans des dossiers
 func printLetterHistoryEnd()  {
