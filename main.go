@@ -8,7 +8,12 @@ import (
 	"os/exec"
 	"runtime"
 	"sort"
+	"strings"
 )
+
+var liveJose = 10
+var letterHistory []string
+var letterHistoryEnd []string
 
 func main() {
 	chooseDifficulty()
@@ -26,8 +31,6 @@ func ClearTerminal() {
 	cmd.Stdout = os.Stdout
 	cmd.Run()
 }
-
-//LiveJose a la fin du code !!!!
 
 func chooseDifficulty(){
 var difficulty int // CHOISIR NIVEAU DIFFICULTE (POUR LE MOMENT UTILISER SEULEMENT DIIFUCLTE 1 ON CODERA LES AUTRES PLUS TARD)
@@ -118,181 +121,317 @@ func findWordClue(arrSelectWord []string){
 
 func associateClueToWord(randomClues []int, arrSelectWord []string){
 	values := 0 // SERT A AFFICHER SEULEMENT LES LETTRES ALEATOIRES CHOISIS PRECEDEMENT
-	var wordPatriallyReveal []string
+	var wordPartiallyReveal []string
 	if len(randomClues) == 0 {
 		for i := 0; i <= len(arrSelectWord)-1; i++ {
-			wordPatriallyReveal = append(wordPatriallyReveal, "_")
+			wordPartiallyReveal = append(wordPartiallyReveal, "_")
 		}
 	} else {
 		for i := 0; i <= len(arrSelectWord)-1; i++ {
 			if i == randomClues[values] { // SERT A AFFICHER SEULEMENT LES LETTRES ALEATOIRES CHOISIS PRECEDEMENT
-				wordPatriallyReveal = append(wordPatriallyReveal, arrSelectWord[i])
+				wordPartiallyReveal = append(wordPartiallyReveal, arrSelectWord[i])
 				if values+1 >= len(randomClues) {
 					values = 0
 				} else {
 					values += 1
 				}
 			}else {
-				wordPatriallyReveal = append(wordPatriallyReveal, "_")
+				wordPartiallyReveal = append(wordPartiallyReveal, "_")
 			} // SERT A AFFICHER SEULEMENT LES LETTRES ALEATOIRES CHOISIS PRECEDEMENT
 		}
 	}
 
 	fmt.Println("")
+	ClearTerminal()
 	fmt.Print("\nLe mot avec le(s) indice(s) est : ")
-	for i := 0; i < len(wordPatriallyReveal); i++ {
-		fmt.Print(wordPatriallyReveal[i])
+	showWordPartiallyReveal(wordPartiallyReveal)
+	fmt.Println("")
+	startGame(arrSelectWord,wordPartiallyReveal,10)
+}
+
+func printLive(liveJose int){
+	file, _ := os.Open("C:\\Ytrack\\tls-challenge-go-23-24\\hangman-classic\\hangman.txt")
+	defer file.Close()
+	scanner := bufio.NewScanner(file)
+	currentline := 0
+	switch liveJose {
+		case 10:
+		fmt.Print("")
+		case 9:
+			startline := 1
+			endline := 7
+			for scanner.Scan() {
+				currentline++
+				if currentline >= startline && currentline <= endline {
+					fmt.Println(scanner.Text())
+				}
+				if currentline > endline {
+					file.Close()
+					break
+				}
+			}
+		case 8:
+			startline := 8
+			endline := 14
+			for scanner.Scan() {
+				currentline++
+				if currentline >= startline && currentline <= endline {
+					fmt.Println(scanner.Text())
+				}
+				if currentline > endline {
+					break
+				}
+			}
+		case 7:
+			startline := 15
+			endline := 22
+			for scanner.Scan() {
+				currentline++
+				if currentline >= startline && currentline <= endline {
+					fmt.Println(scanner.Text())
+				}
+				if currentline > endline {
+					break
+				}
+			}
+		case 6:
+			startline := 23
+			endline := 30
+			for scanner.Scan() {
+				currentline++
+				if currentline >= startline && currentline <= endline {
+					fmt.Println(scanner.Text())
+				}
+				if currentline > endline {
+					break
+				}
+			}
+		case 5:
+			startline := 31
+			endline := 38
+			for scanner.Scan() {
+				currentline++
+				if currentline >= startline && currentline <= endline {
+					fmt.Println(scanner.Text())
+				}
+				if currentline > endline {
+					break
+				}
+			}
+		case 4:
+			startline := 39
+			endline := 46
+			for scanner.Scan() {
+				currentline++
+				if currentline >= startline && currentline <= endline {
+					fmt.Println(scanner.Text())
+				}
+				if currentline > endline {
+					break
+				}
+			}
+		case 3:
+			startline := 47
+			endline := 54
+			for scanner.Scan() {
+				currentline++
+				if currentline >= startline && currentline <= endline {
+					fmt.Println(scanner.Text())
+				}
+				if currentline > endline {
+					break
+				}
+			}
+		case 2:
+			startline := 55
+			endline := 62
+			for scanner.Scan() {
+				currentline++
+				if currentline >= startline && currentline <= endline {
+					fmt.Println(scanner.Text())
+				}
+				if currentline > endline {
+					break
+				}
+			}
+		case 1:
+			startline := 63
+			endline := 70
+			for scanner.Scan() {
+				currentline++
+				if currentline >= startline && currentline <= endline {
+					fmt.Println(scanner.Text())
+				}
+				if currentline > endline {
+					break
+				}
+			}
+		case 0:
+			startline := 71
+			endline := 78
+			for scanner.Scan() {
+				currentline++
+				if currentline >= startline && currentline <= endline {
+					fmt.Println(scanner.Text())
+				}
+				if currentline > endline {
+					break
+				}
+			}
 	}
-	fmt.Println("")
-	fmt.Println("")
-}
-
-func startGame(){
-	//Commence à partir d'ici (tu peux tester le reste mais normallement tout fonctionne regarde comment j'ai fais et tu continues pour le reste vasy bonne chance je viens a 15h.)
-	// ET SURTOUT MODIFIE PAS MON CODE AU DESSUS A MOINS QUE CA SOIT VRAIMENT OBLIGATOIRE !!!
 }
 
 
-/*
-Fais juste des copier coller du code en dessous.
-
-liveJose := 0
-live := []string{"", "=========\n", "    |  \n    |  \n    |  \n    |  \n    |  \n=========\n", "  +---+  \n      |  \n      |  \n      |  \n      |  \n      |  \n=========\n", "  +---+  \n  |   |  \n      |  \n      |  \n      |  \n      |  \n=========\n", "  +---+  \n  |   |  \n  O   |  \n      |  \n      |  \n      |  \n=========\n", "  +---+  \n  |   |  \n  O   |  \n  |   |  \n      |  \n      |  \n=========\n", "  +---+  \n  |   |  \n  O   |  \n /|   |  \n      |  \n      |  \n=========\n", "  +---+  \n  |   |  \n  O   |  \n /|\\  |  \n      |  \n      |  \n=========\n", "  +---+  \n  |   |  \n  O   |  \n /|\\  |  \n /    |  \n      |  \n=========\n", "  +---+  \n  |   |  \n  O   |  \n /|\\  |  \n / \\  |  \n      |  \n=========\n"}
-
-	tryRemain := 10 // Nombre d'essais maximum
-	var letterHistory []string
-	var letterHistoryEnd []string
-	for tryRemain > 0 {
-		if liveJose > 0 {
-			fmt.Println(live[liveJose])
-		}
-		fmt.Printf("Il vous reste %d vie avant d'être pendu !\n", tryRemain)
-
+func startGame(arrSelectWord []string, wordPartiallyReveal [] string, liveJose int){
+		printLive(liveJose)
+		fmt.Println("")
+		fmt.Printf("Il vous reste %d vie avant d'être pendu !\n", liveJose)
 		var choice string
 		var choiceToLower string
 		for i := 0; i <= 1; i++ {
 			fmt.Print("Entrez votre lettre : ")
-			fmt.Scanln(&choice)
+			fmt.Scan(&choice)
 			choiceToLower = strings.ToLower(choice)
 			choiceToLowerRune := []rune(choiceToLower)
-			if len(choiceToLowerRune) > 1 || (choiceToLowerRune[0] >= rune(0) && choiceToLowerRune[0] <= rune(96) || (choiceToLowerRune[0] > rune(122))) {
+			if len(choiceToLowerRune) > 1 || (choiceToLowerRune[0] >= rune(0) && choiceToLowerRune[0] <= rune(96) || (choiceToLowerRune[0] > rune(122)))  {
 				ClearTerminal()
-				fmt.Println("Merci de saisir UN seul caractère de l'alphabet !.")
+				fmt.Println("Merci de saisir UN seul caractère de l'alphabet !")
 				i--
 			} else {
 				break
 			}
 		}
-
 		letterHistory = append(letterHistory, choiceToLower)
 		letterHistoryEnd = append(letterHistoryEnd, choiceToLower)
-		letterFind := false
+		refreshWord(arrSelectWord,choiceToLower,wordPartiallyReveal,letterHistory,letterHistoryEnd)
+}
 
-		for index, letter := range arrSelectWord {
-			if letter == choiceToLower {
-				wordPatriallyReveal[index] = letter
-				letterFind = true
+func refreshWord(arrSelectWord []string, choiceToLower string, wordPartiallyReveal []string, letterHistory []string, letterHistoryEnd []string) {
+	letterFind := false
+	for index, letter := range arrSelectWord {
+		if letter == choiceToLower {
+			wordPartiallyReveal[index] = letter
+			letterFind = true
+		}
+	}
+	histroy(letterHistory, choiceToLower, letterFind ,wordPartiallyReveal,letterHistoryEnd,arrSelectWord)
+}
+
+func histroy (letterHistory []string, choiceToLower string, letterFind bool, wordPartiallyReveal []string, letterHistoryEnd []string, arrSelectWord []string){
+	counter := 0
+	letterAlreadyUse := false
+	for _, char := range letterHistory {
+		if choiceToLower == char {
+			counter++
+			if counter > 1 {
+				counter = 0
+				letterAlreadyUse = true
+				if len(letterHistory) > 0 {
+					letterHistory = letterHistory[:len(letterHistory)-1]
+				}
 			}
 		}
+	}
+	checkLetterUse(letterFind, letterAlreadyUse, wordPartiallyReveal, letterHistory, letterHistoryEnd, arrSelectWord)
+}
 
-		counter := 0
-		alreadyUse := false
-		for _, char := range letterHistory {
-			if choiceToLower == char {
-				counter++
-				if counter > 1 {
-					counter = 0
-					alreadyUse = true
-					if len(letterHistory) > 0 {
-						letterHistory = letterHistory[:len(letterHistory)-1]
-					}
-				}
-			}
-		}
-
-			if letterFind == true {
-				ClearTerminal()
-				if alreadyUse == true {
-					fmt.Println("VOUS AVEZ DEJA ESSAYEZ CETTE LETTRE ! FAITES ATTENTION.")
-				}
-				fmt.Println("")
-				fmt.Println("Bonne lettre !")
-				fmt.Println("")
-				fmt.Printf("Pour le moment le mot ressemble à ca -> ")
-				for i := 0; i < len(wordPatriallyReveal); i++ {
-					fmt.Print(wordPatriallyReveal[i])
-				}
-				fmt.Println("")
-				fmt.Print("Les lettres déjà essayé sont : ")
-				for i := 0; i <= len(letterHistory)-1; i++ {
-					fmt.Print(letterHistory[i])
-					fmt.Print(" ")
-				}
-				fmt.Println("")
-				fmt.Println("")
-
-			} else {
-				ClearTerminal()
-				if alreadyUse == true {
-					fmt.Println("VOUS AVEZ DÉJA ESSAYEZ CETTE LETTRE ! FAITES ATTENTION.")
-				}
-				tryRemain--
-				liveJose++
-				fmt.Println("")
-				fmt.Println("Mauvaise lettre.")
-				fmt.Println("")
-				fmt.Printf("Pour le moment le mot ressemble à ca -> ")
-				for i := 0; i < len(wordPatriallyReveal); i++ {
-					fmt.Print(wordPatriallyReveal[i])
-				}
-				fmt.Println("")
-				fmt.Print("L'historique de vos lettres est : ")
-				for i := 0; i <= len(letterHistory)-1; i++ {
-					fmt.Print(letterHistory[i])
-					fmt.Print(" ")
-				}
-				fmt.Println("")
-				fmt.Println("")
-			}
-
-			// Vérifier si le mot est complètement deviné
-			wordFind := true
-			for _, letter := range wordPatriallyReveal {
-				if letter == "_" {
-					wordFind = false
-					break
-				}
-			}
-			if wordFind == true {
-				fmt.Printf("\nVous avez deviné le mot !")
-				fmt.Println("")
-				fmt.Print("Vos propositions ont étaient : ")
-				for i := 0; i <= len(letterHistoryEnd)-1; i++ {
-					fmt.Print(letterHistoryEnd[i])
-					fmt.Print(" ")
-				}
-				fmt.Println("")
-				fmt.Println("")
-				return
-			}
-		}
-
-		fmt.Print("\nVous n'avez plus de vie. Le mot était : ")
-		for i := 0; i < len(arrSelectWord); i++ {
-			fmt.Print(arrSelectWord[i])
-
-		}
-		fmt.Println("")
-		fmt.Println("")
-		fmt.Println(live[10])
-		fmt.Print("Vos propositions ont étaient : ")
-		for i := 0; i <= len(letterHistoryEnd)-1; i++ {
-			fmt.Print(letterHistoryEnd[i])
-			fmt.Print(" ")
-		}
-		fmt.Println("")
-		fmt.Println("")
-		fmt.Println("Vous êtes pendu !")
+func checkLetterUse(letterFind bool, alreadyUse bool, wordPartiallyReveal []string,letterHistory []string,letterHistoryEnd []string, arrSelectWord []string) {
+	if letterFind == true && alreadyUse == true {
+			ClearTerminal()
+			fmt.Println("VOUS AVEZ DEJA ESSAYEZ CETTE LETTRE ! FAITES ATTENTION.")
+	}
+	if letterFind == true{
+		findLetterYes(wordPartiallyReveal, letterHistory, letterHistoryEnd, arrSelectWord)
+	}else{
+		findLetterNo(wordPartiallyReveal, letterHistory, letterHistoryEnd, arrSelectWord)
 	}
 }
+
+func findLetterYes(wordPartiallyReveal []string, letterHistory []string, letterHistoryEnd []string,arrSelectWord []string){
+	fmt.Println("")
+	ClearTerminal()
+	fmt.Println("Bonne lettre !")
+	fmt.Println("")
+	fmt.Printf("Pour le moment le mot ressemble à ca -> ")
+	showWordPartiallyReveal(wordPartiallyReveal)
+	fmt.Print("Les lettres déjà essayé sont : ")
+	showLetterHistoryInGame(letterHistory)
+	checkWordFind(wordPartiallyReveal, letterHistoryEnd,arrSelectWord)
+}
+
+func findLetterNo(wordPartiallyReveal []string, letterHistory []string, letterHistoryEnd []string,arrSelectWord []string){
+	liveJose--
+	ClearTerminal()
+	fmt.Println("Mauvaise lettre.")
+	fmt.Println("")
+	fmt.Printf("Pour le moment le mot ressemble à ca -> ")
+	showWordPartiallyReveal(wordPartiallyReveal)
+	fmt.Print("Les lettres déjà essayé sont : ")
+	showLetterHistoryInGame(letterHistory)
+	checkWordFind(wordPartiallyReveal, letterHistoryEnd,arrSelectWord)
+}
+
+func showWordPartiallyReveal(wordPartiallyReveal []string){
+	for i := 0; i < len(wordPartiallyReveal); i++ {
+		fmt.Print(wordPartiallyReveal[i])
+	}
+	fmt.Println("")
+}
+
+func showLetterHistoryInGame(letterHistory []string){
+	for i := 0; i <= len(letterHistory)-1; i++ {
+		fmt.Print(letterHistory[i])
+		fmt.Print(" ")
+	}
+	fmt.Println("")
+	fmt.Println("")
+}
+
+func showLetterHistoryEnd(letterHistoryEnd []string)  {
+	for i := 0; i <= len(letterHistoryEnd)-1; i++ {
+		fmt.Print(letterHistoryEnd[i])
+		fmt.Print(" ")
+	}
+	fmt.Println("")
+	fmt.Println("")
+}
+
+func printWord(arrSelectWord []string){
+	for i := 0; i < len(arrSelectWord); i++ {
+		fmt.Print(arrSelectWord[i])
+	}
+}
+
+
+func checkWordFind(wordPartiallyReveal []string, letterHistoryEnd []string,arrSelectWord []string) {
+	wordFind := true
+	for _, letter := range wordPartiallyReveal {
+		if letter == "_" {
+			wordFind = false
+			break
+		}
+	}
+	if wordFind == true {
+		ClearTerminal()
+		fmt.Printf("\nVous avez deviné le mot !")
+		fmt.Println("")
+		fmt.Print("Vos propositions ont étaient : ")
+		showLetterHistoryEnd(letterHistoryEnd)
+	}else if liveJose == 0{
+		ClearTerminal()
+		fmt.Print("\nVous n'avez plus de vie. Le mot était : ")
+		printWord(arrSelectWord)
+		fmt.Println("")
+		fmt.Println("")
+		printLive(0)
+		fmt.Print("Vos propositions ont étaient : ")
+		showLetterHistoryEnd(letterHistoryEnd)
+		fmt.Println("Vous êtes pendu !")
+	}else{
+		startGame(arrSelectWord,wordPartiallyReveal,liveJose)
+	}
+}
+
+/*
+live := []string{"  +---+  \n  |   |  \n  O   |  \n /|\\  |  \n / \\  |  \n      |  \n=========\n", "  +---+  \n  |   |  \n  O   |  \n /|\\  |  \n /    |  \n      |  \n=========\n", "  +---+  \n  |   |  \n  O   |  \n /|\\  |  \n      |  \n      |  \n=========\n","=========\n","  +---+  \n  |   |  \n  O   |  \n /|   |  \n      |  \n      |  \n=========\n" ,"  +---+  \n  |   |  \n  O   |  \n  |   |  \n      |  \n      |  \n=========\n" , "  +---+  \n  |   |  \n  O   |  \n      |  \n      |  \n      |  \n=========\n","  +---+  \n  |   |  \n      |  \n      |  \n      |  \n      |  \n=========\n" ,"  +---+  \n      |  \n      |  \n      |  \n      |  \n      |  \n=========\n" , "    |  \n    |  \n    |  \n    |  \n    |  \n=========\n" ,""}
 */
