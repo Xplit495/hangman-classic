@@ -14,12 +14,12 @@ func selectDifficulty(asciiMode string, pathAscii string) {
 	for i := 0; i <= 1; i++ {
 		ClearTerminal()
 		fmt.Println("")
-		fmt.Print("Choissisez votre niveau de difficulté (1-3), 1: Facile, 2: Moyen, 3: Difficile. Que choissisez-vous : ")
+		fmt.Print("Choissisez votre mode (1-3), 1: Facile, 2: Moyen, 3: Difficile, 4: Multijoueur. Que choissisez-vous : ")
 		_, err := fmt.Scanln(&difficulty)
 		if err != nil {
 			fmt.Println("Erreur lors de la lecture de l'entrée standard")
 		}
-		if difficulty != 1 && difficulty != 2 && difficulty != 3 {
+		if difficulty != 1 && difficulty != 2 && difficulty != 3 && difficulty != 4 {
 			i--
 		} else {
 			break
@@ -42,7 +42,40 @@ func selectDictionnaryPath(asciiMode string, pathAscii string, difficulty int) {
 	case 3:
 		absolutePath := dictionnaryPath + "words3.txt"
 		selectRandomWordIntoDictionnary(asciiMode, pathAscii, absolutePath)
+	case 4:
+		playMultiPlayer(asciiMode, pathAscii)
 	}
+}
+
+func playMultiPlayer(asciiMode string, pathAscii string) {
+	var (
+		toFind            string
+		arrSelectWord     []string
+		arrSelectWordRune []rune
+	)
+	for i := 0; i < 1; i++ {
+		fmt.Print("\nBienvenue dans le mode multijoueur ! Choissisez un mot pour votre adversaire : ")
+		_, err := fmt.Scanln(&toFind)
+		if err != nil {
+			fmt.Println("Erreur lors de la lecture de l'entrée standard")
+		}
+		toFind = strings.ToLower(toFind)
+		arrSelectWordRune = []rune(toFind)
+
+		for j := 0; j < len(arrSelectWordRune); j++ {
+			if arrSelectWordRune[j] >= rune(97) && arrSelectWordRune[j] <= rune(122) {
+			} else {
+				ClearTerminal()
+				fmt.Println("Merci de saisir" + red + " UNIQUEMENT " + reset + "des caractère de l'alphabet !")
+				i--
+				break
+			}
+		}
+	}
+
+	arrSelectWord = strings.Split(toFind, "")
+
+	generateWordClue(asciiMode, pathAscii, arrSelectWord)
 }
 
 func selectRandomWordIntoDictionnary(asciiMode string, pathAscii string, absolutePath string) {
