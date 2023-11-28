@@ -106,6 +106,10 @@ func ClearTerminal() {
 }
 
 func PrintRules(asciiMode string, pathAscii string) {
+	currentDir, _ := os.Getwd()
+	pathAsciiForBeggin := currentDir + "\\resources\\ascii\\standard.txt"
+	printAscii(pathAsciiForBeggin, []string{"H", "A", "N", "G", "M", "A", "N", "-", "C", "L", "A", "S", "S", "I", "C"})
+
 	fmt.Println("")
 	fmt.Println("Bienvenue dans ce super jeu, les régles sont simples :")
 	fmt.Println("- Vous pouvez proposer ou un mot ou une lettre")

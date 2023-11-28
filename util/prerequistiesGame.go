@@ -30,7 +30,7 @@ func selectDifficulty(asciiMode string, pathAscii string) {
 
 func selectDictionnaryPath(asciiMode string, pathAscii string, difficulty int) {
 	currentDir, _ := os.Getwd()
-	dictionnaryPath := currentDir + "\\resources\\dictionnary"
+	dictionnaryPath := currentDir + "\\resources\\dictionnary\\"
 
 	switch difficulty {
 	case 1:
@@ -61,8 +61,6 @@ func selectRandomWordIntoDictionnary(asciiMode string, pathAscii string, absolut
 	}
 	err := f.Close()
 	if err != nil {
-		fmt.Println("Erreur lors de la fermeture du fichier de dictionnaire")
-		return
 	}
 	indexRandomWord = rand.Intn(numberOfWords)
 
@@ -79,8 +77,6 @@ func selectRandomWordIntoDictionnary(asciiMode string, pathAscii string, absolut
 	}
 	err2 := f2.Close()
 	if err2 != nil {
-		fmt.Println("Erreur lors de la fermeture du fichier de dictionnaire")
-		return
 	}
 	arrSelectWord = strings.Split(word, "")
 
