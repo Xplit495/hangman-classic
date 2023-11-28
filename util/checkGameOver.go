@@ -98,6 +98,6 @@ func checkGameOver(asciiMode string, pathAscii string, arrSelectWord []string, w
 		}
 
 	} else {
-		StartGame(asciiMode, pathAscii, arrSelectWord, wordPartiallyReveal, letterHistory, wordHistory, liveJose)
+		startGame(asciiMode, pathAscii, arrSelectWord, wordPartiallyReveal, letterHistory, wordHistory, liveJose)
 	}
 }

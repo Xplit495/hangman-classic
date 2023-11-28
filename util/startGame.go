@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-func StartGame(asciiMode string, pathAscii string, arrSelectWord []string, wordPartiallyReveal []string, letterHistory []string, wordHistory []string, liveJose int) {
+func startGame(asciiMode string, pathAscii string, arrSelectWord []string, wordPartiallyReveal []string, letterHistory []string, wordHistory []string, liveJose int) {
 	var (
 		choice               string
 		choiceToLower        string

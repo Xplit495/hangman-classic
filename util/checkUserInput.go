@@ -6,11 +6,11 @@ func checkInputAlreadyUses(asciiMode string, pathAscii string, arrSelectWord []s
 	if letterAlreadyUse == true {
 		ClearTerminal()
 		fmt.Println(red + "Vous avez déjà essayé cette lettre, attention !" + reset)
-		StartGame(asciiMode, pathAscii, arrSelectWord, wordPartiallyReveal, letterHistory, wordHistory, liveJose)
+		startGame(asciiMode, pathAscii, arrSelectWord, wordPartiallyReveal, letterHistory, wordHistory, liveJose)
 	} else if wordAlreadyUse == true {
 		ClearTerminal()
 		fmt.Println(red + "Vous avez déjà essayé ce mot, attention !" + reset)
-		StartGame(asciiMode, pathAscii, arrSelectWord, wordPartiallyReveal, letterHistory, wordHistory, liveJose)
+		startGame(asciiMode, pathAscii, arrSelectWord, wordPartiallyReveal, letterHistory, wordHistory, liveJose)
 	}
 	fmt.Println("")
 	checkInputIsGood(asciiMode, pathAscii, arrSelectWord, wordPartiallyReveal, letterHistory, wordHistory, liveJose, choiceToLowerStrings, letterFind, wordFind)

@@ -138,5 +138,5 @@ func associateClueToWord(asciiMode string, pathAscii string, randomClues []int, 
 	fmt.Print("\nLe mot avec le(s) indice(s) est : ")
 	printWordPartiallyReveal(asciiMode, pathAscii, wordPartiallyReveal)
 	fmt.Println("")
-	StartGame(asciiMode, pathAscii, arrSelectWord, wordPartiallyReveal, letterHistory, wordHistory, liveJose)
+	startGame(asciiMode, pathAscii, arrSelectWord, wordPartiallyReveal, letterHistory, wordHistory, liveJose)
 }
