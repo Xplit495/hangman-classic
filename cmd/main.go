@@ -41,7 +41,7 @@ func main() {
 	if startWith == "save.txt" {
 
 		type Gamestate struct {
-			ArrSelectWord       []string `json:"Wordtofind"`
+			ArrSelectWord       []string `json:"ArrSelectWord"`
 			WordPartiallyReveal []string `json:"WordPartiallyReveal"`
 			LetterHistory       []string `json:"LetterHistory"`
 			WordHistory         []string `json:"WordHistory"`
