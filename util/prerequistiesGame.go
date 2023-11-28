@@ -74,6 +74,7 @@ func playMultiPlayer(asciiMode string, pathAscii string) {
 	}
 
 	arrSelectWord = strings.Split(toFind, "")
+	ClearTerminal()
 
 	generateWordClue(asciiMode, pathAscii, arrSelectWord)
 }
