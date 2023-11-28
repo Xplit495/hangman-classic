@@ -7,8 +7,8 @@
     <list default="true" id="e0ff406e-bcb2-48e7-b2b5-e60e7d073754" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/ascii/standard.txt" beforeDir="false" afterPath="$PROJECT_DIR$/resources/ascii/standard.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/util/checkGameOver.go" beforeDir="false" afterPath="$PROJECT_DIR$/util/checkGameOver.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/util/prerequistiesGame.go" beforeDir="false" afterPath="$PROJECT_DIR$/util/prerequistiesGame.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/util/printFunctions.go" beforeDir="false" afterPath="$PROJECT_DIR$/util/printFunctions.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -67,18 +67,18 @@
     </key>
   </component>
   <component name="RunManager">
-    <configuration name="go build hangman/cmd" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
+    <configuration name="go build hangman-classic/cmd" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
       <module name="hangman-classic" />
       <working_directory value="$PROJECT_DIR$" />
       <kind value="PACKAGE" />
-      <package value="hangman/cmd" />
+      <package value="hangman-classic/cmd" />
       <directory value="$PROJECT_DIR$" />
       <filePath value="$PROJECT_DIR$/cmd/main.go" />
       <method v="2" />
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Go Build.go build hangman/cmd" />
+        <item itemvalue="Go Build.go build hangman-classic/cmd" />
       </list>
     </recent_temporary>
   </component>

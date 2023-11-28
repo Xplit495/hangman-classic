@@ -62,7 +62,7 @@ func selectRandomWordIntoDictionnary(asciiMode string, pathAscii string, absolut
 	err := f.Close()
 	if err != nil {
 	}
-	indexRandomWord = rand.Intn(numberOfWords)
+	indexRandomWord = rand.Intn(numberOfWords) + 1
 
 	currentLine := 0
 	f2, _ := os.Open(absolutePath)
