@@ -5,7 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e0ff406e-bcb2-48e7-b2b5-e60e7d073754" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/resources/dictionnary/easy.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/dictionnary/hard.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/dictionnary/medium.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/dictionnary/words.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/dictionnary/words2.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/dictionnary/words3.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/util/prerequistiesGame.go" beforeDir="false" afterPath="$PROJECT_DIR$/util/prerequistiesGame.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />

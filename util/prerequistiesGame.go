@@ -34,13 +34,13 @@ func selectDictionnaryPath(asciiMode string, pathAscii string, difficulty int) {
 
 	switch difficulty {
 	case 1:
-		absolutePath := dictionnaryPath + "words.txt"
+		absolutePath := dictionnaryPath + "easy.txt"
 		selectRandomWordIntoDictionnary(asciiMode, pathAscii, absolutePath)
 	case 2:
-		absolutePath := dictionnaryPath + "words2.txt"
+		absolutePath := dictionnaryPath + "medium.txt"
 		selectRandomWordIntoDictionnary(asciiMode, pathAscii, absolutePath)
 	case 3:
-		absolutePath := dictionnaryPath + "words3.txt"
+		absolutePath := dictionnaryPath + "hard.txt"
 		selectRandomWordIntoDictionnary(asciiMode, pathAscii, absolutePath)
 	case 4:
 		playMultiPlayer(asciiMode, pathAscii)
