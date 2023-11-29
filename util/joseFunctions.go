@@ -7,18 +7,18 @@ import (
 )
 
 func printJose(startLine int, endLine int) {
-	currentDir, _ := os.Getwd()
-	absolutePath := currentDir + "\\resources\\hangman.txt"
-	file, _ := os.Open(absolutePath)
-	scanner := bufio.NewScanner(file)
-	currentLine := 0
+	currentDir, _ := os.Getwd()                             // Get current directory
+	absolutePath := currentDir + "\\resources\\hangman.txt" // Absolute path to the file
+	file, _ := os.Open(absolutePath)                        // Open the file
+	scanner := bufio.NewScanner(file)                       // Create a scanner to read the file
+	currentLine := 0                                        // Current line of the file
 	for scanner.Scan() {
 		currentLine++
-		if currentLine >= startLine && currentLine <= endLine {
-			fmt.Println(scanner.Text())
+		if currentLine >= startLine && currentLine <= endLine { // If the current line is between the start and end line
+			fmt.Println(scanner.Text()) // Print the line
 		}
-		if currentLine > endLine {
-			err := file.Close()
+		if currentLine > endLine { // If the current line is greater than the end line
+			err := file.Close() // Close the file
 			if err != nil {
 				fmt.Println("Erreur lors de la fermeture du fichier hangman")
 				return
@@ -29,7 +29,7 @@ func printJose(startLine int, endLine int) {
 }
 
 func chooseLiveJose(liveJose int) {
-	switch liveJose {
+	switch liveJose { // Choose the right case in function of the number of lives
 	case 10:
 		fmt.Print("")
 	case 9:

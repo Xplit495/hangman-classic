@@ -2,102 +2,57 @@ package util
 
 import (
 	"fmt"
-	"os"
-	"strings"
 )
 
 func checkGameOver(asciiMode string, pathAscii string, arrSelectWord []string, wordPartiallyReveal []string, letterHistory []string, wordHistory []string, liveJose int) {
-	var restart string
 
-	wordFind := true
-	for _, letter := range wordPartiallyReveal {
-		if letter == "_" {
-			wordFind = false
+	wordFind := true                             //If word is find
+	for _, letter := range wordPartiallyReveal { //Move in the wordPartiallyReveal array
+		if letter == "_" { //If there is a "_" in the array
+			wordFind = false //Word is not find
 			break
 		}
 	}
-	if wordFind == true {
+	if wordFind == true { //If word is find
 		ClearTerminal()
-		fmt.Print("\n" + green + "Vous avez deviné le mot !" + reset + "\nLe mot était : ")
-		printWord(asciiMode, pathAscii, arrSelectWord)
+		fmt.Print("\n" + green + "Vous avez deviné le mot !" + reset + "\nLe mot était : ") //Print success message
+		printWord(asciiMode, pathAscii, arrSelectWord)                                      //Print the word completely reveal
 		fmt.Println("")
 
-		if len(letterHistory) > 0 {
+		if len(letterHistory) > 0 { //If letterHistory array is not empty show the letter history
 			fmt.Println("")
 			fmt.Print("Les lettres essayés ont été : ")
 			printLetterHistory(letterHistory)
 		}
-		if len(wordHistory) > 0 {
+		if len(wordHistory) > 0 { //If wordHistory array is not empty show the word history
 			fmt.Print("Les mots essayés ont été : ")
 			printWordHistory(wordHistory)
 		}
 
-		fmt.Println("")
-		fmt.Print("Voulez-vous rejouer ? (o/n) : ")
-		fmt.Scan(&restart)
-		restart = strings.ToLower(restart)
-		for i := 0; i <= 1; i++ {
+		restartGame(asciiMode, pathAscii) //Call function to restart the game
 
-			if restart == "o" {
-				PrintRules(asciiMode, pathAscii)
-
-			} else if restart == "n" {
-				fmt.Println("\nMerci d'avoir joué !")
-				fmt.Println("")
-				os.Exit(0)
-
-			} else {
-				i--
-				ClearTerminal()
-				fmt.Print("Veuillez entrer une réponse valide (o/n) : ")
-				fmt.Scan(&restart)
-				restart = strings.ToLower(restart)
-			}
-		}
-
-	} else if liveJose <= 0 {
+	} else if liveJose <= 0 { //If live is equal or less than 0
 		ClearTerminal()
-		fmt.Print("\n" + red + "Vous n'avez plus de vie !" + reset + "\nLe mot était : ")
-		printWord(asciiMode, pathAscii, arrSelectWord)
-		printJose(71, 78)
+		fmt.Print("\n" + red + "Vous n'avez plus de vie !" + reset + "\nLe mot était : ") //Print lose message
+		printWord(asciiMode, pathAscii, arrSelectWord)                                    //Print the word completely reveal
+		printJose(71, 78)                                                                 //Print Jose completely hang
 
-		if len(letterHistory) > 0 {
+		if len(letterHistory) > 0 { //If letterHistory array is not empty show the letter history
 			fmt.Println("")
 			fmt.Print("Les lettres essayés ont été : ")
 			printLetterHistory(letterHistory)
 		}
 
-		if len(wordHistory) > 0 {
+		if len(wordHistory) > 0 { //If wordHistory array is not empty show the word history
 			fmt.Print("Les mots essayés ont été : ")
 			printWordHistory(wordHistory)
 		}
 		fmt.Println("")
-		fmt.Println(red + "Vous êtes pendu !" + reset)
+		fmt.Println(red + "Vous êtes pendu !" + reset) //Print lose message
 
-		fmt.Println("")
-		fmt.Print("Voulez-vous rejouer ? (o/n) : ")
-		fmt.Scan(&restart)
-		restart = strings.ToLower(restart)
-		for i := 0; i <= 1; i++ {
-
-			if restart == "o" {
-				PrintRules(asciiMode, pathAscii)
-
-			} else if restart == "n" {
-				fmt.Println("\nMerci d'avoir joué !")
-				fmt.Println("")
-				os.Exit(0)
-
-			} else {
-				i--
-				ClearTerminal()
-				fmt.Print("Veuillez entrer une réponse valide (o/n): ")
-				fmt.Scanln(&restart)
-				restart = strings.ToLower(restart)
-			}
-		}
+		restartGame(asciiMode, pathAscii) //Call function to restart the game
 
 	} else {
-		startGame(asciiMode, pathAscii, arrSelectWord, wordPartiallyReveal, letterHistory, wordHistory, liveJose)
+		startGame(asciiMode, pathAscii, arrSelectWord, wordPartiallyReveal, letterHistory, wordHistory, liveJose) //If game is not over recall the startGame function
 	}
 }

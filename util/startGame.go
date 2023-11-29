@@ -17,11 +17,11 @@ func startGame(asciiMode string, pathAscii string, arrSelectWord []string, wordP
 	fmt.Println("")
 	fmt.Printf("Il vous reste "+yellow+"%d vie "+reset+"avant d'être pendu !\n", liveJose)
 	fmt.Println("")
-	if len(letterHistory) > 0 {
+	if len(letterHistory) > 0 { //If letterHistory is not empty
 		fmt.Print("Les lettres déjà essayé sont : ")
 		printLetterHistory(letterHistory)
 	}
-	if len(wordHistory) > 0 {
+	if len(wordHistory) > 0 { //If wordHistory is not empty
 		fmt.Print("Les mots déjà essayé sont : ")
 		printWordHistory(wordHistory)
 	}
@@ -34,27 +34,27 @@ func startGame(asciiMode string, pathAscii string, arrSelectWord []string, wordP
 			fmt.Println("Erreur lors de la lecture de l'entrée standard")
 			return
 		}
-		choiceToLower = strings.ToLower(choice)
+		choiceToLower = strings.ToLower(choice) //Convert choice to lowercase
 
-		if choiceToLower == "stop" {
+		if choiceToLower == "stop" { //If choiceToLower is equal to "stop" call the function createGameSave
 			createGameSave(arrSelectWord, wordPartiallyReveal, letterHistory, wordHistory, liveJose)
 		}
 
-		choiceToLowerRune = []rune(choiceToLower)
-		if len(wordPartiallyReveal) == len(choiceToLowerRune) || len(choiceToLowerRune) == 1 {
-			for j := 0; j < len(choiceToLowerRune); j++ {
-				choiceToLowerStrings = append(choiceToLowerStrings, string(choiceToLowerRune[j]))
+		choiceToLowerRune = []rune(choiceToLower)                                              //Convert choiceToLower to rune
+		if len(wordPartiallyReveal) == len(choiceToLowerRune) || len(choiceToLowerRune) == 1 { //If wordPartiallyReveal is equal to choiceToLower or choiceToLower is equal to 1 (if user input is a word of equal size than the word to find or if user input is a letter)
+			for j := 0; j < len(choiceToLowerRune); j++ { //For each letter of choiceToLowerRune
+				choiceToLowerStrings = append(choiceToLowerStrings, string(choiceToLowerRune[j])) //Append the letter to choiceToLowerStrings
 			}
 			exit := true
 			for k := 0; k < len(choiceToLowerRune); k++ {
-				if choiceToLowerRune[k] >= rune(97) && choiceToLowerRune[k] <= rune(122) {
+				if choiceToLowerRune[k] >= rune(97) && choiceToLowerRune[k] <= rune(122) { //Check if the letter is between a and z
 					if k+1 == len(choiceToLowerRune) {
 						break
 					}
-				} else {
+				} else { //If the letter is not between a and z prevent the user and ask him to enter only letters
 					ClearTerminal()
 					fmt.Println("Merci de saisir" + red + " UNIQUEMENT " + reset + "des caractère de l'alphabet !")
-					exit = false
+					exit = false //Set exit to false to prevent the loop to break
 					i--
 				}
 			}
@@ -64,15 +64,15 @@ func startGame(asciiMode string, pathAscii string, arrSelectWord []string, wordP
 		} else {
 			ClearTerminal()
 			fmt.Println("Merci de saisir " + red + "UNIQUEMENT " + reset + "une lettre ou un mot (de même longeur) !")
-			i--
+			i-- //Decrement i to ask the user to enter a letter or a word again
 		}
 	}
-	if len(choiceToLowerStrings) == 1 {
+	if len(choiceToLowerStrings) == 1 { //If choiceToLowerStrings is equal to 1 (if user input is a letter)
 		for i := 0; i < len(choiceToLowerStrings); i++ {
-			letterHistory = append(letterHistory, choiceToLowerStrings[i])
+			letterHistory = append(letterHistory, choiceToLowerStrings[i]) //Append the letter to letterHistory
 		}
 	} else {
-		wordHistory = append(wordHistory, choiceToLower)
+		wordHistory = append(wordHistory, choiceToLower) //Else, append the word to wordHistory
 	}
 	updateWord(asciiMode, pathAscii, arrSelectWord, wordPartiallyReveal, letterHistory, wordHistory, liveJose, choiceToLowerStrings)
 }
