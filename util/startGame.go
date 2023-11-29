@@ -54,7 +54,10 @@ func startGame(asciiMode string, pathAscii string, arrSelectWord []string, wordP
 				} else { //If the letter is not between a and z prevent the user and ask him to enter only letters
 					ClearTerminal()
 					fmt.Println("Merci de saisir" + red + " UNIQUEMENT " + reset + "des caractère de l'alphabet !")
-					exit = false //Set exit to false to prevent the loop to break
+					fmt.Print("\nPour le moment le mot ressemble à ca -> ")
+					printWordPartiallyReveal(asciiMode, pathAscii, wordPartiallyReveal)
+					fmt.Println("")
+					exit = false //Set exit false to prevent the loop to break
 					i--
 				}
 			}
@@ -64,6 +67,9 @@ func startGame(asciiMode string, pathAscii string, arrSelectWord []string, wordP
 		} else {
 			ClearTerminal()
 			fmt.Println("Merci de saisir " + red + "UNIQUEMENT " + reset + "une lettre ou un mot (de même longeur) !")
+			fmt.Print("\nPour le moment le mot ressemble à ca -> ")
+			printWordPartiallyReveal(asciiMode, pathAscii, wordPartiallyReveal)
+			fmt.Println("")
 			i-- //Decrement i to ask the user to enter a letter or a word again
 		}
 	}

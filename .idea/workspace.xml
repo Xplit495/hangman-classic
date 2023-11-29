@@ -5,19 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e0ff406e-bcb2-48e7-b2b5-e60e7d073754" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/util/restartGame.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmd/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/main.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/util/checkGameOver.go" beforeDir="false" afterPath="$PROJECT_DIR$/util/checkGameOver.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/util/checkUserInput.go" beforeDir="false" afterPath="$PROJECT_DIR$/util/checkUserInput.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/util/createGameSave.go" beforeDir="false" afterPath="$PROJECT_DIR$/util/createGameSave.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/util/joseFunctions.go" beforeDir="false" afterPath="$PROJECT_DIR$/util/joseFunctions.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/util/prerequistiesGame.go" beforeDir="false" afterPath="$PROJECT_DIR$/util/prerequistiesGame.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/util/printFunctions.go" beforeDir="false" afterPath="$PROJECT_DIR$/util/printFunctions.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/util/startFromSave.go" beforeDir="false" afterPath="$PROJECT_DIR$/util/startFromSave.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/util/startGame.go" beforeDir="false" afterPath="$PROJECT_DIR$/util/startGame.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/util/updateHistory.go" beforeDir="false" afterPath="$PROJECT_DIR$/util/updateHistory.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/util/updateWord.go" beforeDir="false" afterPath="$PROJECT_DIR$/util/updateWord.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -100,7 +89,24 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="CUSTOM_BOOLEAN_PROPERTIES">
+                <map>
+                  <entry key="Show.Git.Branches" value="true" />
+                </map>
+              </option>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="HEAD" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>
@@ -111,5 +117,16 @@
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/util/startGame.go</url>
+          <line>7</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
