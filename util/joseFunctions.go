@@ -15,7 +15,7 @@ func printJose(startLine int, endLine int) {
 	for scanner.Scan() {
 		currentLine++
 		if currentLine >= startLine && currentLine <= endLine { // If the current line is between the start and end line
-			fmt.Println(scanner.Text()) // Print the line
+			fmt.Println(red + scanner.Text() + reset) // Print the line
 		}
 		if currentLine > endLine { // If the current line is greater than the end line
 			err := file.Close() // Close the file

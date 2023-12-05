@@ -4,21 +4,28 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e0ff406e-bcb2-48e7-b2b5-e60e7d073754" name="Changes" comment="">
+    <list default="true" id="d36b9716-e4c1-45f5-9655-02c3ccce7d66" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmd/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/dictionnary/easy.txt" beforeDir="false" afterPath="$PROJECT_DIR$/resources/dictionnary/easy.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/dictionnary/hard.txt" beforeDir="false" afterPath="$PROJECT_DIR$/resources/dictionnary/hard.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/dictionnary/medium.txt" beforeDir="false" afterPath="$PROJECT_DIR$/resources/dictionnary/medium.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/util/checkGameOver.go" beforeDir="false" afterPath="$PROJECT_DIR$/util/checkGameOver.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/util/checkUserInput.go" beforeDir="false" afterPath="$PROJECT_DIR$/util/checkUserInput.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/util/createGameSave.go" beforeDir="false" afterPath="$PROJECT_DIR$/util/createGameSave.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/util/joseFunctions.go" beforeDir="false" afterPath="$PROJECT_DIR$/util/joseFunctions.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/util/prerequistiesGame.go" beforeDir="false" afterPath="$PROJECT_DIR$/util/prerequistiesGame.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/util/printFunctions.go" beforeDir="false" afterPath="$PROJECT_DIR$/util/printFunctions.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/util/restartGame.go" beforeDir="false" afterPath="$PROJECT_DIR$/util/restartGame.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/util/startFromSave.go" beforeDir="false" afterPath="$PROJECT_DIR$/util/startFromSave.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/util/startGame.go" beforeDir="false" afterPath="$PROJECT_DIR$/util/startGame.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/util/updateHistory.go" beforeDir="false" afterPath="$PROJECT_DIR$/util/updateHistory.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/util/updateWord.go" beforeDir="false" afterPath="$PROJECT_DIR$/util/updateWord.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
-  </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="Go File" />
-      </list>
-    </option>
   </component>
   <component name="GOROOT" url="file://$PROJECT_DIR$/../../../../Program Files/Go" />
   <component name="Git.Settings">
@@ -27,43 +34,31 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
-  <component name="ProjectColorInfo">{
-  &quot;customColor&quot;: &quot;&quot;,
-  &quot;associatedIndex&quot;: 1
-}</component>
-  <component name="ProjectId" id="2YlKXpEFuZj5pVkp583qSSc1FOZ" />
-  <component name="ProjectLevelVcsManager">
-    <ConfirmationsSetting value="2" id="Add" />
-  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 1
+}]]></component>
+  <component name="ProjectId" id="2Z8MqvD8n9sTcfhztNiHJdaT3OS" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;DefaultGoTemplateProperty&quot;: &quot;Go File&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.go.formatter.settings.were.checked&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.go.migrated.go.modules.settings&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.go.modules.automatic.dependencies.download&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.go.modules.go.list.on.any.changes.was.set&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;go.import.settings.migrated&quot;: &quot;true&quot;,
-    &quot;go.sdk.automatically.set&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/xplit&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.go.formatter.settings.were.checked": "true",
+    "RunOnceActivity.go.migrated.go.modules.settings": "true",
+    "RunOnceActivity.go.modules.go.list.on.any.changes.was.set": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "master",
+    "go.import.settings.migrated": "true",
+    "go.sdk.automatically.set": "true",
+    "last_opened_file_path": "C:/Users/xplit/Desktop/hangman-classic",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm"
   }
-}</component>
-  <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\xplit\Desktop\hangman-classic\util" />
-      <recent name="C:\Users\xplit\Desktop\hangman-classic\util\rules" />
-    </key>
-  </component>
+}]]></component>
   <component name="RunManager">
     <configuration name="go build hangman-classic/cmd" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
       <module name="hangman-classic" />
@@ -84,49 +79,7 @@
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
-  <component name="Vcs.Log.Tabs.Properties">
-    <option name="TAB_STATES">
-      <map>
-        <entry key="MAIN">
-          <value>
-            <State>
-              <option name="CUSTOM_BOOLEAN_PROPERTIES">
-                <map>
-                  <entry key="Show.Git.Branches" value="true" />
-                </map>
-              </option>
-              <option name="FILTERS">
-                <map>
-                  <entry key="branch">
-                    <value>
-                      <list>
-                        <option value="HEAD" />
-                      </list>
-                    </value>
-                  </entry>
-                </map>
-              </option>
-            </State>
-          </value>
-        </entry>
-      </map>
-    </option>
-  </component>
-  <component name="VcsManagerConfiguration">
-    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-  </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/util/startGame.go</url>
-          <line>7</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>
