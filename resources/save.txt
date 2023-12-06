@@ -1,1 +1,1 @@
-{"ArrSelectWord":["e","t","a","b","l","i","s","s","e","m","e","n","t"],"WordPartiallyReveal":["e","_","a","b","l","_","_","_","e","_","e","_","_"],"LetterHistory":["x","c","e","b"],"WordHistory":null,"LiveJose":8}
+{"ArrSelectWord":["z","i","p","p","e","r"],"WordPartiallyReveal":["_","i","p","p","_","_"],"LetterHistory":["p","x","c"],"WordHistory":null,"LiveJose":8}

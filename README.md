@@ -14,27 +14,27 @@ This project is the Hangman-Classic ask on Ytrack
 
 ## Deployment
 
-IMPORTANT ! Before execute any command, open a terminal since the program folder.
+IMPORTANT ! Before executing any command, open a terminal from the program folder.
 
-- For start the normal game
+- To start the normal game
 
 ```bash
   go run .\cmd\main.go
 
 ```
-- For start in ASCII Art mode (You can replace name_of_file by : standard / shadow / thinkertoy)
+- To start in ASCII Art mode (You can replace name_of_file by : standard / shadow / thinkertoy)
 ```bash
   go run .\cmd\main.go --letterFile (name_of_file).txt
 
 
 ```
-- For start since the save file (IMPORTANT everytime a save file is created his name is save.txt)
+- To start since the save file (IMPORTANT everytime a save file is created his name is save.txt)
 ```bash
   go run .\cmd\main.go --startWith save.txt
 
 
 ```
-- For start since the save file and Ascii Art mode in same time (You can replace name_of_file by : standard / shadow / thinkertoy)
+- To start since the save file and Ascii Art mode in same time (You can replace name_of_file by : standard / shadow / thinkertoy)
 ```bash
   go run .\cmd\main.go --startWith save.txt --letterFile (name_of_ascii_file).txt
 
