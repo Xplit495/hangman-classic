@@ -29,7 +29,8 @@ func checkGameOver(asciiMode string, pathAscii string, arrSelectWord []string, w
 			printWordHistory(wordHistory)
 		}
 
-		restartGame(asciiMode, pathAscii) //Call function to restart the game
+		addStats(asciiMode, arrSelectWord, wordPartiallyReveal, letterHistory, wordHistory, liveJose, wordFind) //Call function to add stats
+		restartGame(asciiMode, pathAscii)                                                                       //Call function to restart the game
 
 	} else if liveJose <= 0 { //If live is equal or less than 0
 		ClearTerminal()
@@ -50,7 +51,8 @@ func checkGameOver(asciiMode string, pathAscii string, arrSelectWord []string, w
 		fmt.Println("")
 		fmt.Println(red + "Vous êtes pendu !" + reset) //Print lose message
 
-		restartGame(asciiMode, pathAscii) //Call function to restart the game
+		addStats(asciiMode, arrSelectWord, wordPartiallyReveal, letterHistory, wordHistory, liveJose, wordFind) //Call function to add stats
+		restartGame(asciiMode, pathAscii)                                                                       //Call function to restart the game
 
 	} else {
 		startGame(asciiMode, pathAscii, arrSelectWord, wordPartiallyReveal, letterHistory, wordHistory, liveJose) //If game is not over recall the startGame function
