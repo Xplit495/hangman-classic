@@ -43,6 +43,8 @@ IMPORTANT ! Before executing any command, open a terminal from the program folde
 
 ## Appendix
 
+Every time a game is finish a stats file is refresh for add your game history and all your stats (enjoy :)
+
 If you want to stop the game and save your progression into a save file just write STOP into the standard input
 
 
