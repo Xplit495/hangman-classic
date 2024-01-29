@@ -6,7 +6,7 @@ import (
 	"os"
 )
 
-func createGameSave(arrSelectWord []string, wordPartiallyReveal []string, letterHistory []string, wordHistory []string, liveJose int) {
+func CreateGameSave(arrSelectWord []string, wordPartiallyReveal []string, letterHistory []string, wordHistory []string, liveJose int) {
 
 	type Gamestate struct { //Create a struct to save the game
 		ArrSelectWord       []string

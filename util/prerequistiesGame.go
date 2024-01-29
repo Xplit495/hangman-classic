@@ -9,7 +9,7 @@ import (
 	"strings"
 )
 
-func selectDifficulty(asciiMode string, pathAscii string) {
+func SelectDifficulty(asciiMode string, pathAscii string) {
 	var difficulty int
 	for i := 0; i <= 1; i++ { //Loop to check if the user enter a correct value
 		ClearTerminal()
@@ -25,29 +25,29 @@ func selectDifficulty(asciiMode string, pathAscii string) {
 			break
 		}
 	}
-	selectDictionnaryPath(asciiMode, pathAscii, difficulty)
+	SelectDictionnaryPath(asciiMode, pathAscii, difficulty)
 }
 
-func selectDictionnaryPath(asciiMode string, pathAscii string, difficulty int) {
+func SelectDictionnaryPath(asciiMode string, pathAscii string, difficulty int) {
 	currentDir, _ := os.Getwd()                                  //Get the current directory
 	dictionnaryPath := currentDir + "\\resources\\dictionnary\\" //Set the path to the dictionnary
 
 	switch difficulty {
 	case 1:
 		absolutePath := dictionnaryPath + "easy.txt" //Set the exact path of the dictionnary in function of the difficulty
-		selectRandomWordIntoDictionnary(asciiMode, pathAscii, absolutePath)
+		SelectRandomWordIntoDictionnary(asciiMode, pathAscii, absolutePath)
 	case 2:
 		absolutePath := dictionnaryPath + "medium.txt" //Set the exact path of the dictionnary in function of the difficulty
-		selectRandomWordIntoDictionnary(asciiMode, pathAscii, absolutePath)
+		SelectRandomWordIntoDictionnary(asciiMode, pathAscii, absolutePath)
 	case 3:
 		absolutePath := dictionnaryPath + "hard.txt" //Set the exact path of the dictionnary in function of the difficulty
-		selectRandomWordIntoDictionnary(asciiMode, pathAscii, absolutePath)
+		SelectRandomWordIntoDictionnary(asciiMode, pathAscii, absolutePath)
 	case 4:
-		playMultiPlayer(asciiMode, pathAscii)
+		PlayMultiPlayer(asciiMode, pathAscii)
 	}
 }
 
-func playMultiPlayer(asciiMode string, pathAscii string) {
+func PlayMultiPlayer(asciiMode string, pathAscii string) {
 	var (
 		toFind            string
 		arrSelectWord     []string
@@ -76,10 +76,10 @@ func playMultiPlayer(asciiMode string, pathAscii string) {
 	arrSelectWord = strings.Split(toFind, "") //Convert the word to an array of string
 	ClearTerminal()
 
-	generateWordClue(asciiMode, pathAscii, arrSelectWord)
+	GenerateWordClue(asciiMode, pathAscii, arrSelectWord)
 }
 
-func selectRandomWordIntoDictionnary(asciiMode string, pathAscii string, absolutePath string) {
+func SelectRandomWordIntoDictionnary(asciiMode string, pathAscii string, absolutePath string) {
 	var (
 		arrSelectWord   []string
 		word            string
@@ -114,10 +114,10 @@ func selectRandomWordIntoDictionnary(asciiMode string, pathAscii string, absolut
 	}
 	arrSelectWord = strings.Split(word, "") //Convert the word to an array of string
 
-	generateWordClue(asciiMode, pathAscii, arrSelectWord)
+	GenerateWordClue(asciiMode, pathAscii, arrSelectWord)
 }
 
-func generateWordClue(asciiMode string, pathAscii string, arrSelectWord []string) {
+func GenerateWordClue(asciiMode string, pathAscii string, arrSelectWord []string) {
 	var (
 		randomClues []int
 		n           = (len(arrSelectWord) / 2) - 1 //Ytrack condition
@@ -137,10 +137,10 @@ func generateWordClue(asciiMode string, pathAscii string, arrSelectWord []string
 	}
 	sort.Ints(randomClues)
 
-	associateClueToWord(asciiMode, pathAscii, randomClues, arrSelectWord)
+	AssociateClueToWord(asciiMode, pathAscii, randomClues, arrSelectWord)
 }
 
-func associateClueToWord(asciiMode string, pathAscii string, randomClues []int, arrSelectWord []string) {
+func AssociateClueToWord(asciiMode string, pathAscii string, randomClues []int, arrSelectWord []string) {
 	var (
 		values              = 0
 		wordPartiallyReveal []string
@@ -170,7 +170,7 @@ func associateClueToWord(asciiMode string, pathAscii string, randomClues []int, 
 
 	fmt.Println("")
 	fmt.Print("\nLe mot avec le(s) indice(s) est : ")
-	printWordPartiallyReveal(asciiMode, pathAscii, wordPartiallyReveal)
+	PrintWordPartiallyReveal(asciiMode, pathAscii, wordPartiallyReveal)
 	fmt.Println("")
-	startGame(asciiMode, pathAscii, arrSelectWord, wordPartiallyReveal, letterHistory, wordHistory, liveJose)
+	StartGame(asciiMode, pathAscii, arrSelectWord, wordPartiallyReveal, letterHistory, wordHistory, liveJose)
 }

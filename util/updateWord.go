@@ -1,6 +1,6 @@
 package util
 
-func updateWord(asciiMode string, pathAscii string, arrSelectWord []string, wordPartiallyReveal []string, letterHistory []string, wordHistory []string, liveJose int, choiceToLowerStrings []string) {
+func UpdateWord(asciiMode string, pathAscii string, arrSelectWord []string, wordPartiallyReveal []string, letterHistory []string, wordHistory []string, liveJose int, choiceToLowerStrings []string) {
 	var (
 		letterFind = false
 		wordFind   = false
@@ -25,6 +25,6 @@ func updateWord(asciiMode string, pathAscii string, arrSelectWord []string, word
 			wordFind = true
 		}
 	}
-	printWordPartiallyReveal(asciiMode, pathAscii, wordPartiallyReveal)
-	updateHistroy(asciiMode, pathAscii, arrSelectWord, wordPartiallyReveal, letterHistory, wordHistory, liveJose, choiceToLowerStrings, letterFind, wordFind)
+	PrintWordPartiallyReveal(asciiMode, pathAscii, wordPartiallyReveal)
+	UpdateHistroy(asciiMode, pathAscii, arrSelectWord, wordPartiallyReveal, letterHistory, wordHistory, liveJose, choiceToLowerStrings, letterFind, wordFind)
 }

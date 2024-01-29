@@ -17,7 +17,7 @@ var (
 	reset  = "\033[0m"
 )
 
-func printAscii(pathAscii string, wordToPrintInAscii []string) {
+func PrintAscii(pathAscii string, wordToPrintInAscii []string) {
 	wordToPrintInAsciiString := strings.Join(wordToPrintInAscii, "") // Convert the array of string into a string because cannot convert directly an array of string into an array of rune
 	arrRune := []rune(wordToPrintInAsciiString)                      // Convert the string into an array of rune
 	for i := 0; i < 9; i++ {
@@ -53,9 +53,9 @@ func printAscii(pathAscii string, wordToPrintInAscii []string) {
 	}
 }
 
-func printWordPartiallyReveal(asciiMode string, pathAscii string, wordPartiallyReveal []string) {
+func PrintWordPartiallyReveal(asciiMode string, pathAscii string, wordPartiallyReveal []string) {
 	if asciiMode != "" { //If the user want to play with ascii mode we call the function printAscii
-		printAscii(pathAscii, wordPartiallyReveal)
+		PrintAscii(pathAscii, wordPartiallyReveal)
 	} else {
 		for i := 0; i < len(wordPartiallyReveal); i++ { //Else we print the word normally (with a loop cause the word is an array of string)
 			fmt.Print(wordPartiallyReveal[i])
@@ -66,7 +66,7 @@ func printWordPartiallyReveal(asciiMode string, pathAscii string, wordPartiallyR
 
 func printWord(asciiMode string, pathAscii string, arrSelectWord []string) {
 	if asciiMode != "" { //If the user want to play with ascii mode we call the function printAscii
-		printAscii(pathAscii, arrSelectWord)
+		PrintAscii(pathAscii, arrSelectWord)
 	} else {
 		for i := 0; i < len(arrSelectWord); i++ { //Else we print the word normally (with a loop cause the word is an array of string)
 			fmt.Print(arrSelectWord[i])
@@ -75,7 +75,7 @@ func printWord(asciiMode string, pathAscii string, arrSelectWord []string) {
 	fmt.Println("")
 }
 
-func printLetterHistory(letterHistory []string) {
+func PrintLetterHistory(letterHistory []string) {
 	for i := 0; i <= len(letterHistory)-1; i++ { //We print the letter history with a loop cause the letter history is an array of string
 		fmt.Print(letterHistory[i])
 		fmt.Print(" ")
@@ -83,7 +83,7 @@ func printLetterHistory(letterHistory []string) {
 	fmt.Println("")
 }
 
-func printWordHistory(wordHistory []string) {
+func PrintWordHistory(wordHistory []string) {
 	for i := 0; i < len(wordHistory); i++ { //We print the word history with a loop cause the word history is an array of string
 		fmt.Print(wordHistory[i])
 		fmt.Print(" ")
@@ -109,7 +109,7 @@ func ClearTerminal() {
 func PrintRules(asciiMode string, pathAscii string) {
 	currentDir, _ := os.Getwd()                                           //Get the current directory
 	pathAsciiForBeggin := currentDir + "\\resources\\ascii\\standard.txt" //Create the path for the ascii file
-	printAscii(pathAsciiForBeggin, []string{"H", "A", "N", "G", "M", "A", "N", "-", "C", "L", "A", "S", "S", "I", "C"})
+	PrintAscii(pathAsciiForBeggin, []string{"H", "A", "N", "G", "M", "A", "N", "-", "C", "L", "A", "S", "S", "I", "C"})
 
 	fmt.Println("")
 	fmt.Println("Bienvenue dans ce super jeu, les régles sont simples :")
@@ -121,5 +121,5 @@ func PrintRules(asciiMode string, pathAscii string) {
 		fmt.Println("Erreur lors de la lecture de l'entrée standard")
 		return
 	}
-	selectDifficulty(asciiMode, pathAscii)
+	SelectDifficulty(asciiMode, pathAscii)
 }

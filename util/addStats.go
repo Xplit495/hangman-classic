@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-func addStats(asciiMode string, arrSelectWord []string, wordPartiallyReveal []string, letterHistory []string, wordHistory []string, liveJose int, wordFind bool) {
+func AddStats(asciiMode string, arrSelectWord []string, wordPartiallyReveal []string, letterHistory []string, wordHistory []string, liveJose int, wordFind bool) {
 	var (
 		result        string
 		currentDir, _ = os.Getwd()

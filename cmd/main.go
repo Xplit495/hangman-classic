@@ -3,7 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
-	Util "hangman-classic/util"
+	"github.com/Xplit495/hangman-classic/util"
 	"os"
 )
 
@@ -37,9 +37,9 @@ func main() {
 		return
 
 	} else if startWith == "save.txt" {
-		Util.StartFromSave(asciiMode, pathAscii) // Go in the function to start from the save file if is available
+		util.StartFromSave(asciiMode, pathAscii) // Go in the function to start from the save file if is available
 	} else {
-		Util.ClearTerminal()
-		Util.PrintRules(asciiMode, pathAscii) // Else, go in the function to print the rules
+		util.ClearTerminal()
+		util.PrintRules(asciiMode, pathAscii) // Else, go in the function to print the rules
 	}
 }

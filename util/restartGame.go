@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-func restartGame(asciiMode string, pathAscii string) {
+func RestartGame(asciiMode string, pathAscii string) {
 	var restart string
 
 	fmt.Println("")

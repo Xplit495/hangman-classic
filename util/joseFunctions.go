@@ -6,7 +6,7 @@ import (
 	"os"
 )
 
-func printJose(startLine int, endLine int) {
+func PrintJose(startLine int, endLine int) {
 	currentDir, _ := os.Getwd()                             // Get current directory
 	absolutePath := currentDir + "\\resources\\hangman.txt" // Absolute path to the file
 	file, _ := os.Open(absolutePath)                        // Open the file
@@ -28,27 +28,27 @@ func printJose(startLine int, endLine int) {
 	}
 }
 
-func chooseLiveJose(liveJose int) {
+func ChooseLiveJose(liveJose int) {
 	switch liveJose { // Choose the right case in function of the number of lives
 	case 10:
 		fmt.Print("")
 	case 9:
-		printJose(1, 7)
+		PrintJose(1, 7)
 	case 8:
-		printJose(8, 14)
+		PrintJose(8, 14)
 	case 7:
-		printJose(15, 22)
+		PrintJose(15, 22)
 	case 6:
-		printJose(23, 30)
+		PrintJose(23, 30)
 	case 5:
-		printJose(31, 38)
+		PrintJose(31, 38)
 	case 4:
-		printJose(39, 46)
+		PrintJose(39, 46)
 	case 3:
-		printJose(47, 54)
+		PrintJose(47, 54)
 	case 2:
-		printJose(55, 62)
+		PrintJose(55, 62)
 	case 1:
-		printJose(63, 70)
+		PrintJose(63, 70)
 	}
 }
