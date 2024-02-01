@@ -28,8 +28,7 @@ func SelectDifficulty(asciiMode string, pathAscii string) {
 	//SelectDictionnaryPath(asciiMode, pathAscii, difficulty)
 }
 
-func SelectDictionnaryPath(difficulty string) string {
-	currentDir, _ := os.Getwd()                                  //Get the current directory
+func SelectDictionnaryPath(difficulty string, currentDir string) string {
 	dictionnaryPath := currentDir + "\\resources\\dictionnary\\" //Set the path to the dictionnary
 	absolutePath := ""
 
