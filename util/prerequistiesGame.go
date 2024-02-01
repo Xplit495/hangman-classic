@@ -73,7 +73,7 @@ func PlayMultiPlayer(asciiMode string, pathAscii string) {
 	arrSelectWord = strings.Split(toFind, "") //Convert the word to an array of string
 	ClearTerminal()
 
-	GenerateWordClue(asciiMode, pathAscii, arrSelectWord)
+	//GenerateWordClue(asciiMode, pathAscii, arrSelectWord)
 }
 
 func SelectRandomWordIntoDictionnary(absolutePath string) []string {
@@ -114,7 +114,7 @@ func SelectRandomWordIntoDictionnary(absolutePath string) []string {
 	return arrSelectWord
 }
 
-func GenerateWordClue(asciiMode string, pathAscii string, arrSelectWord []string) {
+func GenerateWordClue(arrSelectWord []string) []int {
 	var (
 		randomClues []int
 		n           = (len(arrSelectWord) / 2) - 1 //Ytrack condition
@@ -134,16 +134,13 @@ func GenerateWordClue(asciiMode string, pathAscii string, arrSelectWord []string
 	}
 	sort.Ints(randomClues)
 
-	AssociateClueToWord(asciiMode, pathAscii, randomClues, arrSelectWord)
+	return randomClues
 }
 
-func AssociateClueToWord(asciiMode string, pathAscii string, randomClues []int, arrSelectWord []string) {
+func AssociateClueToWord(randomClues []int, arrSelectWord []string) []string {
 	var (
 		values              = 0
 		wordPartiallyReveal []string
-		letterHistory       []string
-		wordHistory         []string
-		liveJose            = 10
 	)
 
 	if len(randomClues) == 0 {
@@ -164,10 +161,5 @@ func AssociateClueToWord(asciiMode string, pathAscii string, randomClues []int, 
 			}
 		}
 	}
-
-	fmt.Println("")
-	fmt.Print("\nLe mot avec le(s) indice(s) est : ")
-	PrintWordPartiallyReveal(asciiMode, pathAscii, wordPartiallyReveal)
-	fmt.Println("")
-	StartGame(asciiMode, pathAscii, arrSelectWord, wordPartiallyReveal, letterHistory, wordHistory, liveJose)
+	return wordPartiallyReveal
 }
