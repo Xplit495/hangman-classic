@@ -28,23 +28,20 @@ func SelectDifficulty(asciiMode string, pathAscii string) {
 	SelectDictionnaryPath(asciiMode, pathAscii, difficulty)
 }
 
-func SelectDictionnaryPath(asciiMode string, pathAscii string, difficulty int) {
+func SelectDictionnaryPath(difficulty string) string {
 	currentDir, _ := os.Getwd()                                  //Get the current directory
 	dictionnaryPath := currentDir + "\\resources\\dictionnary\\" //Set the path to the dictionnary
+	absolutePath := ""
 
 	switch difficulty {
-	case 1:
-		absolutePath := dictionnaryPath + "easy.txt" //Set the exact path of the dictionnary in function of the difficulty
-		SelectRandomWordIntoDictionnary(asciiMode, pathAscii, absolutePath)
-	case 2:
-		absolutePath := dictionnaryPath + "medium.txt" //Set the exact path of the dictionnary in function of the difficulty
-		SelectRandomWordIntoDictionnary(asciiMode, pathAscii, absolutePath)
-	case 3:
-		absolutePath := dictionnaryPath + "hard.txt" //Set the exact path of the dictionnary in function of the difficulty
-		SelectRandomWordIntoDictionnary(asciiMode, pathAscii, absolutePath)
-	case 4:
-		PlayMultiPlayer(asciiMode, pathAscii)
+	case "easy":
+		absolutePath = dictionnaryPath + "easy.txt" //Set the exact path of the dictionnary in function of the difficulty
+	case "medium":
+		absolutePath = dictionnaryPath + "medium.txt" //Set the exact path of the dictionnary in function of the difficulty
+	case "hard":
+		absolutePath = dictionnaryPath + "hard.txt" //Set the exact path of the dictionnary in function of the difficulty
 	}
+	return absolutePath
 }
 
 func PlayMultiPlayer(asciiMode string, pathAscii string) {
@@ -79,7 +76,7 @@ func PlayMultiPlayer(asciiMode string, pathAscii string) {
 	GenerateWordClue(asciiMode, pathAscii, arrSelectWord)
 }
 
-func SelectRandomWordIntoDictionnary(asciiMode string, pathAscii string, absolutePath string) {
+func SelectRandomWordIntoDictionnary(absolutePath string) []string {
 	var (
 		arrSelectWord   []string
 		word            string
@@ -114,7 +111,7 @@ func SelectRandomWordIntoDictionnary(asciiMode string, pathAscii string, absolut
 	}
 	arrSelectWord = strings.Split(word, "") //Convert the word to an array of string
 
-	GenerateWordClue(asciiMode, pathAscii, arrSelectWord)
+	return arrSelectWord
 }
 
 func GenerateWordClue(asciiMode string, pathAscii string, arrSelectWord []string) {
