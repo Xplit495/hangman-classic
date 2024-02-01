@@ -25,7 +25,7 @@ func SelectDifficulty(asciiMode string, pathAscii string) {
 			break
 		}
 	}
-	SelectDictionnaryPath(asciiMode, pathAscii, difficulty)
+	//SelectDictionnaryPath(asciiMode, pathAscii, difficulty)
 }
 
 func SelectDictionnaryPath(difficulty string) string {
