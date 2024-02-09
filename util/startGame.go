@@ -41,7 +41,7 @@ func StartGame(choice string, wordPartiallyReveal []string, letterHistory []stri
 			for i := 0; i < len(choiceToLowerStrings); i++ {
 				letterHistory = append(letterHistory, choiceToLowerStrings[i]) //Append the letter to letterHistory
 			}
-		} else {
+		} else if len(choiceToLowerRune) == len(wordHistory) {
 			wordHistory = append(wordHistory, choiceToLower) //Else, append the word to wordHistory
 		}
 	}
