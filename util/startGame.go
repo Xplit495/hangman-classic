@@ -4,7 +4,7 @@ import (
 	"strings"
 )
 
-func StartGame(choice string, wordPartiallyReveal []string, letterHistory []string, wordHistory []string) (bool, []string, []string) {
+func StartGame(choice string, wordPartiallyReveal []string, letterHistory []string, wordHistory []string) (bool, []string, []string, []string) {
 	var (
 		choiceToLower        string
 		choiceToLowerStrings []string
@@ -33,7 +33,7 @@ func StartGame(choice string, wordPartiallyReveal []string, letterHistory []stri
 		}
 	} else {
 		goodInput = false
-		return goodInput, letterHistory, wordHistory
+		return goodInput, letterHistory, wordHistory, choiceToLowerStrings
 	}
 
 	if goodInput == true {
@@ -45,5 +45,5 @@ func StartGame(choice string, wordPartiallyReveal []string, letterHistory []stri
 			wordHistory = append(wordHistory, choiceToLower) //Else, append the word to wordHistory
 		}
 	}
-	return goodInput, letterHistory, wordHistory
+	return goodInput, letterHistory, wordHistory, choiceToLowerStrings
 }

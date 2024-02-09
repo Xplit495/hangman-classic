@@ -138,7 +138,7 @@ func GenerateWordClue(arrSelectWord []string) []int {
 	return randomClues
 }
 
-func AssociateClueToWord(randomClues []int, arrSelectWord []string) []string {
+func AssociateClueToWord(randomClues []int, arrSelectWord []string) ([]string, []string) {
 	var (
 		values              = 0
 		wordPartiallyReveal []string
@@ -162,5 +162,5 @@ func AssociateClueToWord(randomClues []int, arrSelectWord []string) []string {
 			}
 		}
 	}
-	return wordPartiallyReveal
+	return wordPartiallyReveal, arrSelectWord
 }
