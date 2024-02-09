@@ -55,6 +55,6 @@ func CheckGameOver(asciiMode string, pathAscii string, arrSelectWord []string, w
 		RestartGame(asciiMode, pathAscii)                                                                       //Call function to restart the game
 
 	} else {
-		StartGame(asciiMode, pathAscii, arrSelectWord, wordPartiallyReveal, letterHistory, wordHistory, liveJose) //If game is not over recall the startGame function
+		// StartGame(asciiMode, pathAscii, arrSelectWord, wordPartiallyReveal, letterHistory, wordHistory, liveJose) //If game is not over recall the startGame function
 	}
 }

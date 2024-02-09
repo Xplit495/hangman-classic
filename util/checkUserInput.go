@@ -8,13 +8,13 @@ func CheckInputAlreadyUses(asciiMode string, pathAscii string, arrSelectWord []s
 		fmt.Println(red + "Vous avez déjà essayé cette lettre, attention !" + reset)
 		fmt.Printf("\nPour le moment le mot ressemble à ca -> ")
 		PrintWordPartiallyReveal(asciiMode, pathAscii, wordPartiallyReveal)                                       //Print error message
-		StartGame(asciiMode, pathAscii, arrSelectWord, wordPartiallyReveal, letterHistory, wordHistory, liveJose) //Restart to select a new letter or word
+		//StartGame(asciiMode, pathAscii, arrSelectWord, wordPartiallyReveal, letterHistory, wordHistory, liveJose) //Restart to select a new letter or word
 	} else if wordAlreadyUse == true { //If user input is already use
 		ClearTerminal()
 		fmt.Println(red + "Vous avez déjà essayé ce mot, attention !" + reset) //Print error message
 		fmt.Printf("\nPour le moment le mot ressemble à ca -> ")
 		PrintWordPartiallyReveal(asciiMode, pathAscii, wordPartiallyReveal)
-		StartGame(asciiMode, pathAscii, arrSelectWord, wordPartiallyReveal, letterHistory, wordHistory, liveJose) //Restart to select a new letter or word
+		//StartGame(asciiMode, pathAscii, arrSelectWord, wordPartiallyReveal, letterHistory, wordHistory, liveJose) //Restart to select a new letter or word
 	}
 	fmt.Println("")
 	CheckInputIsGood(asciiMode, pathAscii, arrSelectWord, wordPartiallyReveal, letterHistory, wordHistory, liveJose, choiceToLowerStrings, letterFind, wordFind) //If not already use, check if input is good

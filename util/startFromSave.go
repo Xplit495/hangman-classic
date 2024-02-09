@@ -38,5 +38,5 @@ func StartFromSave(asciiMode string, pathAscii string) {
 	fmt.Println("")
 	fmt.Println("Bon retour parmis nous, votre sauvegarde à préalablement été sauvegardé et est prête à être utilisé !")
 
-	StartGame(asciiMode, pathAscii, restart.ArrSelectWord, restart.WordPartiallyReveal, restart.LetterHistory, restart.WordHistory, restart.LiveJose) // Start the game with the gamestate of the save file
+	// StartGame(asciiMode, pathAscii, restart.ArrSelectWord, restart.WordPartiallyReveal, restart.LetterHistory, restart.WordHistory, restart.LiveJose) // Start the game with the gamestate of the save file
 }
