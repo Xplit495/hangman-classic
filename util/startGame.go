@@ -4,7 +4,7 @@ import (
 	"strings"
 )
 
-func StartGame(choice string, arrSelectWord []string, wordPartiallyReveal []string, letterHistory []string, wordHistory []string, liveJose int) bool {
+func StartGame(choice string, wordPartiallyReveal []string, letterHistory []string, wordHistory []string) bool {
 	var (
 		choiceToLower        string
 		choiceToLowerStrings []string
