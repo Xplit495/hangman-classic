@@ -1,1 +1,0 @@
-{"ArrSelectWord":["z","i","p","p","e","r"],"WordPartiallyReveal":["_","i","p","p","_","_"],"LetterHistory":["p","x","c"],"WordHistory":null,"LiveJose":8}
