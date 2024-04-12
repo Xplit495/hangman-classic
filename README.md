@@ -1,7 +1,7 @@
 
 # Hangman-Classic
 
-This project is the Hangman-Classic ask on Ytrack
+Hangman Classic is a console application for playing the classic game of Hangman. Designed with Go, this project provides an interactive experience for guessing hidden words.
 
 
 ## Features
